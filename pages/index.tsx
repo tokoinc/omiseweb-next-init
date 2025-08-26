@@ -3,6 +3,13 @@
 // Pages/index.js content (export default function Home)
 
 import Head from "next/head";
+import type { ReactNode } from "react";  // ← 追加
+
+// 型を定義
+type ContainerProps = {
+  children: ReactNode;       // ← 追加
+  className?: string;        // ← 追加
+};
 
 const Container = ({ children, className = "" }) => (
   <div className={`mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 ${className}`}>{children}</div>
