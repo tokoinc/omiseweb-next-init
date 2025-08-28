@@ -1,397 +1,741 @@
-// pages/index.tsx
 import Head from "next/head";
-import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useState } from "react";
+import type { ReactNode } from "react";
 
-// -----------------------------
-// Simple bilingual copy (EN/JP)
-// -----------------------------
-const copy = {
+/**
+ * A responsive container component that centers content and limits its width.
+ */
+const Container = ({
+  children,
+  className = "",
+}: {
+  children: ReactNode;
+  className?: string;
+}) => (
+  <div
+    className={`mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 ${className}`}
+  >
+    {children}
+  </div>
+);
+
+// Supported languages
+type Lang = "en" | "th" | "zh";
+
+// Translations for each language. Feel free to update these strings as needed.
+const messages: Record<
+  Lang,
+  {
+    nav: {
+      home: string;
+      services: string;
+      pricing: string;
+      works: string;
+      how: string;
+      faq: string;
+      contact: string;
+    };
+    heroTitle: string;
+    heroSubtitle: string;
+    ctaPrimary: string;
+    ctaSecondary: string;
+    servicesHeading: string;
+    servicesSubheading: string;
+    servicesItems: {
+      creation: {
+        title: string;
+        list: string[];
+      };
+      management: {
+        title: string;
+        list: string[];
+      };
+      marketing: {
+        title: string;
+        comingSoon: string;
+      };
+      recruitment: {
+        title: string;
+        comingSoon: string;
+      };
+    };
+    pricingHeading: string;
+    pricingPlans: {
+      name: string;
+      price: string;
+      highlight?: boolean;
+    }[];
+    howHeading: string;
+    howSteps: { title: string; description: string }[];
+    worksHeading: string;
+    worksTestimonials: string[];
+    faqHeading: string;
+    faqs: { question: string; answer: string }[];
+    contactHeading: string;
+    contactPlaceholders: {
+      name: string;
+      email: string;
+      message: string;
+    };
+    contactButton: string;
+  }
+> = {
   en: {
-    brand: "OmiseWeb",
-    tagline: "Start Your Restaurant or Salon Website in Japan Today",
-    sub: "Built by a Japan‑based team. We create and operate fully localized websites that help you win in the Japanese market.",
+    nav: {
+      home: "Home",
+      services: "Services",
+      pricing: "Pricing",
+      works: "Works",
+      how: "How It Works",
+      faq: "FAQ",
+      contact: "Contact",
+    },
+    heroTitle: "Start Your Restaurant or Salon Website in Japan Today",
+    heroSubtitle:
+      "From website creation to ongoing management — OmiseWeb is your trusted partner for running a successful business in Japan.",
     ctaPrimary: "Get Started – Free Consultation",
     ctaSecondary: "See Pricing",
-    nav: ["Home", "Services", "Pricing", "Works", "How It Works", "FAQ", "Contact"],
-    valueJPTitle: "Why a Japan‑native team matters",
-    valueJPBullets: [
-      "Copywriting & UX optimized for Japanese customers (tone, layout, mobile habits)",
-      "Local platforms: LINE, Google Business Profile, Hotpepper/Beauty, Gurunavi, TableCheck integration",
-      "Legal pages & compliance: 特定商取引法 / 価格の総額表示 / プライバシーポリシー",
-      "Local SEO & listings: map pack, prefecture/city pages, holiday hours, reviews",
-    ],
-    servicesTitle: "Our Services",
-    servicesSub: "Everything you need to launch and run your shop website in Japan.",
-    s1: {
-      h: "Website Creation",
-      items: [
-        "Custom design for restaurants & salons",
-        "Bilingual (EN/JP) with future TH/ZH ready",
-        "Online reservations / booking",
-      ],
+    servicesHeading: "Our Services",
+    servicesSubheading:
+      "Everything you need to launch and run your shop website in Japan.",
+    servicesItems: {
+      creation: {
+        title: "Website Creation",
+        list: [
+          "Custom design for restaurants & salons",
+          "Multilingual (EN/TH/CH)",
+          "Online reservation system",
+        ],
+      },
+      management: {
+        title: "Website Management",
+        list: ["Content updates", "Social media integration", "Security monitoring"],
+      },
+      marketing: {
+        title: "Marketing Support",
+        comingSoon: "Coming Soon",
+      },
+      recruitment: {
+        title: "Recruitment Support",
+        comingSoon: "Coming Soon",
+      },
     },
-    s2: {
-      h: "Website Management",
-      items: ["Content updates", "Social & LINE integration", "Security monitoring"],
-    },
-    s3: { h: "Marketing Support", tag: "Coming Soon" },
-    s4: { h: "Recruitment Support", tag: "Coming Soon" },
-    pricingTitle: "Choose the Right Plan",
-    plans: [
-      { name: "Starter (Ume)", price: "From ¥50,000 / ¥0 monthly", features: ["1‑page site", "EN/JP", "Basic contact form"] },
-      { name: "Premium (Matsu)", price: "From ¥200,000 / ¥30,000 monthly", popular: true, features: ["Up to 10 pages", "Reservations/Booking", "Local SEO + GBP", "Monthly updates"] },
-      { name: "Standard (Take)", price: "From ¥100,000 / ¥10,000 monthly", features: ["Up to 5 pages", "EN/JP", "Blog/News"] },
+    pricingHeading: "Choose the Right Plan",
+    pricingPlans: [
+      { name: "Ume", price: "From ¥50,000 / ¥0 monthly" },
+      { name: "Take", price: "From ¥100,000 / ¥10,000 monthly", highlight: true },
+      { name: "Matsu", price: "From ¥200,000 / ¥30,000 monthly" },
     ],
-    howTitle: "How It Works",
-    how: [
-      { title: "Contact Us", desc: "Online form or LINE" },
-      { title: "Consultation", desc: "We map your needs & competitors" },
-      { title: "Website Creation", desc: "Design & build (~2 weeks)" },
-      { title: "Launch & Support", desc: "Ongoing updates & growth" },
+    howHeading: "How It Works",
+    howSteps: [
+      { title: "1. Contact Us", description: "Online form or LINE" },
+      { title: "2. Consultation", description: "We listen to your needs" },
+      { title: "3. Website Creation", description: "Ready in ~2 weeks" },
+      { title: "4. Launch & Support", description: "Ongoing updates" },
     ],
-    worksTitle: "Works & Testimonials",
-    t1: "Restaurant Owner: “Our international guests can now book in English and Japanese.”",
-    t2: "Salon Owner: “I focus on customers while OmiseWeb keeps the site updated.”",
-    faqTitle: "Frequently Asked Questions",
+    worksHeading: "Works & Testimonials",
+    worksTestimonials: [
+      'Restaurant Owner: "Now our international customers can easily make reservations."',
+      'Salon Owner: "I can focus on my work while OmiseWeb updates my website."',
+    ],
+    faqHeading: "Frequently Asked Questions",
     faqs: [
-      { q: "Can I use the service if I don’t speak Japanese?", a: "Yes, we provide English support and handle Japanese communication." },
-      { q: "Is the website mobile‑friendly?", a: "Yes, responsive design is standard." },
-      { q: "Payment methods?", a: "Credit card / Bank transfer are available." },
+      {
+        question: "Can I use the service if I don’t speak Japanese?",
+        answer: "Yes, we provide English support.",
+      },
+      {
+        question: "Is the website mobile-friendly?",
+        answer: "Yes, responsive design is standard.",
+      },
+      {
+        question: "Payment methods?",
+        answer: "Credit card / Bank transfer.",
+      },
     ],
-    contactTitle: "Contact OmiseWeb",
-    footerNote: (year: number) => `© ${year} OmiseWeb LLC. All rights reserved.`,
-    badgeJP: "Japan‑Native Team",
-    badgeLocalize: "Deep Localization",
-    badgeBilingual: "EN / JP",
-    langLabel: "EN",
-    langSwitch: "JP",
-    seoDescription:
-      "Start your restaurant or salon website in Japan today with OmiseWeb. Japan‑native team for localized website creation, management, and support for international owners.",
+    contactHeading: "Contact OmiseWeb",
+    contactPlaceholders: {
+      name: "Your Name",
+      email: "Email",
+      message: "Message",
+    },
+    contactButton: "Send",
   },
-  jp: {
-    brand: "OmiseWeb",
-    tagline: "日本で飲食店・サロンのホームページを、今日から",
-    sub: "制作から運用まで日本人チームが担当。日本市場で“伝わる”ローカライズ前提のWebサイトを作ります。",
-    ctaPrimary: "無料相談を予約",
-    ctaSecondary: "料金を見る",
-    nav: ["ホーム", "サービス", "料金", "制作実績", "進め方", "FAQ", "お問い合わせ"],
-    valueJPTitle: "日本人チームの強み",
-    valueJPBullets: [
-      "日本の生活文脈に合ったコピー＆UI（言い回し・縦に流れる導線・スマホ最適）",
-      "国内プラットフォーム対応：LINE・Google ビジネス プロフィール・Hotpepper/Beauty・ぐるなび・TableCheck 連携",
-      "法令対応：特商法・総額表示・プライバシーポリシー・クッキーバナー",
-      "ローカルSEO：地図枠、都道府県/市区ページ、営業時間・祝日対応、レビュー運用",
-    ],
-    servicesTitle: "サービス",
-    servicesSub: "日本で集客できる“お店のサイト”に必要なものをすべて。",
-    s1: {
-      h: "サイト制作",
-      items: ["飲食/サロン特化の設計", "日英バイリンガル", "予約/受付フォーム"],
+  th: {
+    nav: {
+      home: "หน้าแรก",
+      services: "บริการ",
+      pricing: "ราคา",
+      works: "ผลงาน",
+      how: "วิธีการทำงาน",
+      faq: "คำถามที่พบบ่อย",
+      contact: "ติดต่อ",
     },
-    s2: { h: "運用代行", items: ["文言/写真の更新", "SNS・LINE連携", "セキュリティ管理"] },
-    s3: { h: "集客支援", tag: "準備中" },
-    s4: { h: "採用支援", tag: "準備中" },
-    pricingTitle: "料金プラン",
-    plans: [
-      { name: "梅（スターター）", price: "初期 ¥50,000〜 / 月額 ¥0", features: ["1ページ構成", "日英対応", "基本お問い合わせ"] },
-      { name: "松（プレミアム）", price: "初期 ¥200,000〜 / 月額 ¥30,000", popular: true, features: ["10ページまで", "予約/決済 連携", "ローカルSEO", "毎月の更新代行"] },
-      { name: "竹（スタンダード）", price: "初期 ¥100,000〜 / 月額 ¥10,000", features: ["5ページまで", "日英対応", "お知らせ/ブログ"] },
+    heroTitle: "เริ่มต้นเว็บไซต์ร้านอาหารหรือซาลอนของคุณในญี่ปุ่นวันนี้",
+    heroSubtitle:
+      "ตั้งแต่การสร้างเว็บไซต์ไปจนถึงการบริหารอย่างต่อเนื่อง — OmiseWeb เป็นพันธมิตรที่เชื่อถือได้สำหรับธุรกิจของคุณในญี่ปุ่น",
+    ctaPrimary: "เริ่มเลย – ปรึกษาฟรี",
+    ctaSecondary: "ดูราคา",
+    servicesHeading: "บริการของเรา",
+    servicesSubheading:
+      "ทุกสิ่งที่คุณต้องการเพื่อเริ่มและดำเนินเว็บไซต์ร้านค้าของคุณในญี่ปุ่น",
+    servicesItems: {
+      creation: {
+        title: "สร้างเว็บไซต์",
+        list: [
+          "ออกแบบเฉพาะสำหรับร้านอาหารและซาลอน",
+          "รองรับหลายภาษา (EN/TH/CH)",
+          "ระบบจองออนไลน์",
+        ],
+      },
+      management: {
+        title: "การจัดการเว็บไซต์",
+        list: [
+          "ปรับปรุงเนื้อหา",
+          "การเชื่อมต่อโซเชียลมีเดีย",
+          "การตรวจสอบความปลอดภัย",
+        ],
+      },
+      marketing: {
+        title: "การสนับสนุนการตลาด",
+        comingSoon: "เร็ว ๆ นี้",
+      },
+      recruitment: {
+        title: "การสนับสนุนการสรรหา",
+        comingSoon: "เร็ว ๆ นี้",
+      },
+    },
+    pricingHeading: "เลือกแผนที่เหมาะสม",
+    pricingPlans: [
+      { name: "Ume", price: "เริ่มต้น ¥50,000 / ฟรีรายเดือน" },
+      {
+        name: "Take",
+        price: "เริ่มต้น ¥100,000 / ¥10,000 ต่อเดือน",
+        highlight: true,
+      },
+      { name: "Matsu", price: "เริ่มต้น ¥200,000 / ¥30,000 ต่อเดือน" },
     ],
-    howTitle: "進め方",
-    how: [
-      { title: "お問い合わせ", desc: "フォーム or LINE" },
-      { title: "ヒアリング", desc: "要件と競合を整理" },
-      { title: "制作", desc: "約2週間で公開" },
-      { title: "運用開始", desc: "継続改善と集客" },
+    howHeading: "ขั้นตอนการทำงาน",
+    howSteps: [
+      { title: "1. ติดต่อเรา", description: "แบบฟอร์มออนไลน์หรือ LINE" },
+      { title: "2. ปรึกษา", description: "เราฟังความต้องการของคุณ" },
+      { title: "3. สร้างเว็บไซต์", description: "พร้อมในประมาณ 2 สัปดาห์" },
+      { title: "4. เปิดตัว & สนับสนุน", description: "อัปเดตอย่างต่อเนื่อง" },
     ],
-    worksTitle: "制作実績 / お客様の声",
-    t1: "飲食店様：「英語と日本語で予約が増えました」",
-    t2: "サロン様：「更新を任せられて接客に集中できています」",
-    faqTitle: "よくあるご質問",
+    worksHeading: "ผลงานและคำชม",
+    worksTestimonials: [
+      'เจ้าของร้านอาหาร: "ตอนนี้ลูกค้าต่างชาติสามารถจองได้ง่าย"',
+      'เจ้าของซาลอน: "ฉันสามารถมุ่งมั่นกับงาน ในขณะที่ OmiseWeb อัปเดตเว็บไซต์ของฉัน"',
+    ],
+    faqHeading: "คำถามที่พบบ่อย",
     faqs: [
-      { q: "日本語が話せなくても大丈夫？", a: "はい。英語でのサポートと、日本側の諸手続き・連絡も代行します。" },
-      { q: "スマホ最適ですか？", a: "もちろんです。レスポンシブ対応が標準です。" },
-      { q: "支払い方法は？", a: "クレジットカード / 銀行振込に対応しています。" },
+      {
+        question: "ถ้าฉันไม่พูดภาษาญี่ปุ่นจะใช้บริการได้ไหม?",
+        answer: "ได้ เรามีการสนับสนุนภาษาอังกฤษ",
+      },
+      {
+        question: "เว็บไซต์รองรับมือถือหรือไม่?",
+        answer: "ใช่ การออกแบบตอบสนองเป็นมาตรฐาน",
+      },
+      {
+        question: "วิธีการชำระเงิน?",
+        answer: "บัตรเครดิต / โอนเงินผ่านธนาคาร",
+      },
     ],
-    contactTitle: "お問い合わせ",
-    footerNote: (year: number) => `© ${year} OmiseWeb LLC.`,
-    badgeJP: "日本人チーム",
-    badgeLocalize: "ローカライズ対応",
-    badgeBilingual: "EN / JP",
-    langLabel: "JP",
-    langSwitch: "EN",
-    seoDescription:
-      "日本人チームが制作・運用するローカライズ対応サイト。飲食店・サロン向けの予約導線と集客に強いホームページを提供します。",
+    contactHeading: "ติดต่อ OmiseWeb",
+    contactPlaceholders: {
+      name: "ชื่อของคุณ",
+      email: "อีเมล",
+      message: "ข้อความ",
+    },
+    contactButton: "ส่ง",
+  },
+  zh: {
+    nav: {
+      home: "首页",
+      services: "服务",
+      pricing: "价格",
+      works: "案例",
+      how: "工作流程",
+      faq: "常见问题",
+      contact: "联系",
+    },
+    heroTitle: "今天就在日本启动您的餐厅或沙龙网站",
+    heroSubtitle:
+      "从网站创建到持续管理 —— OmiseWeb 是您在日本成功经营业务值得信赖的合作伙伴。",
+    ctaPrimary: "立即开始 – 免费咨询",
+    ctaSecondary: "查看价格",
+    servicesHeading: "我们的服务",
+    servicesSubheading:
+      "启动和运营您的店铺网站在日本所需的一切。",
+    servicesItems: {
+      creation: {
+        title: "网站创建",
+        list: [
+          "餐厅和沙龙定制设计",
+          "多语言（EN/TH/CH）",
+          "在线预订系统",
+        ],
+      },
+      management: {
+        title: "网站管理",
+        list: ["内容更新", "社交媒体整合", "安全监控"],
+      },
+      marketing: {
+        title: "营销支持",
+        comingSoon: "敬请期待",
+      },
+      recruitment: {
+        title: "招聘支持",
+        comingSoon: "敬请期待",
+      },
+    },
+    pricingHeading: "选择合适的计划",
+    pricingPlans: [
+      { name: "Ume", price: "起价 ¥50,000 / 免费月费" },
+      {
+        name: "Take",
+        price: "起价 ¥100,000 / 每月 ¥10,000",
+        highlight: true,
+      },
+      { name: "Matsu", price: "起价 ¥200,000 / 每月 ¥30,000" },
+    ],
+    howHeading: "工作流程",
+    howSteps: [
+      { title: "1. 联系我们", description: "在线表单或 LINE" },
+      { title: "2. 咨询", description: "我们聆听您的需求" },
+      { title: "3. 网站创建", description: "大约两周内准备就绪" },
+      { title: "4. 上线及支持", description: "持续更新" },
+    ],
+    worksHeading: "案例与评价",
+    worksTestimonials: [
+      '餐厅老板：“现在我们的海外客户可以轻松预订。”',
+      '沙龙老板：“我可以专心工作，而 OmiseWeb 更新我的网站。”',
+    ],
+    faqHeading: "常见问题",
+    faqs: [
+      {
+        question: "如果我不会说日语还能使用服务吗？",
+        answer: "可以，我们提供英文支持。",
+      },
+      {
+        question: "网站是否适配手机?",
+        answer: "是的，自适应设计是标准配置。",
+      },
+      {
+        question: "付款方式？",
+        answer: "信用卡 / 银行转账。",
+      },
+    ],
+    contactHeading: "联系 OmiseWeb",
+    contactPlaceholders: {
+      name: "您的姓名",
+      email: "电子邮件",
+      message: "留言",
+    },
+    contactButton: "发送",
   },
 };
 
-type Lang = keyof typeof copy;
-
-const Badge = ({ children }: { children: React.ReactNode }) => (
-  <span className="inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium">
-    {children}
-  </span>
-);
-
-const Container = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
-  <div className={`mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 ${className}`}>{children}</div>
-);
-
+/**
+ * The main Home component.
+ * Includes a responsive header with language selector and all sections of the page.
+ */
 export default function Home() {
   const [lang, setLang] = useState<Lang>("en");
-  const t = copy[lang];
-  const year = useMemo(() => new Date().getFullYear(), []);
+  const [isMenuOpen, setMenuOpen] = useState(false);
+  const t = messages[lang];
 
-  // JSON-LD for FAQ + Organization
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: "OmiseWeb",
-    url: "https://example.com/",
-    potentialAction: {
-      "@type": "SearchAction",
-      target: "https://example.com/?s={search_term_string}",
-      "query-input": "required name=search_term_string",
-    },
-  };
-
-  const faqLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: t.faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
-  };
+  // List of available languages for the selector
+  const languageOptions: { code: Lang; label: string }[] = [
+    { code: "en", label: "EN" },
+    { code: "th", label: "TH" },
+    { code: "zh", label: "CH" },
+  ];
 
   return (
     <>
       <Head>
-        <title>OmiseWeb – Restaurant & Salon Websites in Japan</title>
-        <meta name="description" content={t.seoDescription} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+        <title>OmiseWeb – Restaurant &amp; Salon Websites in Japan</title>
+        <meta
+          name="description"
+          content="Start your restaurant or salon website in Japan today with OmiseWeb. Website creation, management, and support for international business owners."
+        />
       </Head>
-
-      <div className="min-h-screen bg-white text-slate-900">
+      <div className="min-h-screen bg-white text-slate-900 flex flex-col">
         {/* Header */}
-        <header className="sticky top-0 z-40 w-full border-b border-slate-200 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+        <header className="sticky top-0 z-40 w-full border-b border-slate-200 bg-white/80 backdrop-blur">
           <Container className="flex h-16 items-center justify-between">
-            <Link href="#" className="flex items-center gap-2" aria-label={t.brand}>
-              <div className="grid h-8 w-8 place-items-center rounded-xl bg-slate-900 font-black text-white">O</div>
-              <span className="text-lg font-bold tracking-tight">{t.brand}</span>
-            </Link>
-
-            {/* Desktop Nav */}
-            <nav className="hidden items-center gap-8 text-sm font-semibold text-slate-700 md:flex" aria-label="Main">
-              {t.nav.map((label, i) => (
-                <Link key={label} href={["#home","#services","#pricing","#works","#how","#faq","#contact"][i] || "#"}>
-                  {label}
-                </Link>
-              ))}
-            </nav>
-
-            {/* Language Switch */}
-            <div className="flex items-center gap-3">
-              <div className="hidden gap-2 md:flex">
-                <Badge>{t.badgeJP}</Badge>
-                <Badge>{t.badgeLocalize}</Badge>
-                <Badge>{t.badgeBilingual}</Badge>
+            {/* Logo */}
+            <a href="#home" className="flex items-center gap-2">
+              <div className="h-8 w-8 rounded-xl bg-slate-900 text-white grid place-items-center font-black">
+                O
               </div>
-              <button
-                aria-label={`Switch language to ${copy[lang === "en" ? "jp" : "en"].langLabel}`}
-                onClick={() => setLang(lang === "en" ? "jp" : "en")}
-                className="rounded-2xl border px-3 py-1 text-sm font-semibold hover:bg-slate-50"
+              <span className="text-lg font-bold tracking-tight">OmiseWeb</span>
+            </a>
+            {/* Desktop navigation */}
+            <nav className="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-700">
+              <a href="#home" onClick={() => setMenuOpen(false)}>
+                {t.nav.home}
+              </a>
+              <a href="#services" onClick={() => setMenuOpen(false)}>
+                {t.nav.services}
+              </a>
+              <a href="#pricing" onClick={() => setMenuOpen(false)}>
+                {t.nav.pricing}
+              </a>
+              <a href="#works" onClick={() => setMenuOpen(false)}>
+                {t.nav.works}
+              </a>
+              <a href="#how" onClick={() => setMenuOpen(false)}>
+                {t.nav.how}
+              </a>
+              <a href="#faq" onClick={() => setMenuOpen(false)}>
+                {t.nav.faq}
+              </a>
+              <a href="#contact" onClick={() => setMenuOpen(false)}>
+                {t.nav.contact}
+              </a>
+            </nav>
+            {/* Language selector and CTA (desktop) */}
+            <div className="hidden md:flex items-center gap-4">
+              <div className="flex items-center gap-1">
+                {languageOptions.map(({ code, label }) => (
+                  <button
+                    key={code}
+                    onClick={() => setLang(code)}
+                    className={`text-sm px-2 py-1 rounded-md transition-colors ${
+                      lang === code
+                        ? "bg-slate-900 text-white"
+                        : "text-slate-700 hover:bg-slate-100"
+                    }`}
+                    aria-label={`Switch language to ${label}`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+              <a
+                href="#contact"
+                className="rounded-2xl bg-red-600 px-4 py-2 font-semibold text-white hover:bg-red-700"
               >
-                {t.langLabel} / {t.langSwitch}
-              </button>
-              <Link href="#contact" className="hidden rounded-2xl bg-red-600 px-4 py-2 font-semibold text-white hover:bg-red-700 md:inline-block">
                 {t.ctaPrimary}
-              </Link>
+              </a>
             </div>
+            {/* Mobile toggle button */}
+            <button
+              onClick={() => setMenuOpen(!isMenuOpen)}
+              className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-slate-700 hover:bg-slate-200 focus:outline-none"
+              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            >
+              {isMenuOpen ? (
+                // Close icon
+                <svg
+                  className="h-6 w-6"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              ) : (
+                // Hamburger icon
+                <svg
+                  className="h-6 w-6"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                </svg>
+              )}
+            </button>
           </Container>
+          {/* Mobile menu */}
+          {isMenuOpen && (
+            <div className="md:hidden bg-white border-b border-slate-200">
+              <nav className="px-4 pt-4 pb-2 space-y-1 text-sm font-semibold text-slate-700">
+                <a
+                  href="#home"
+                  className="block py-2"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {t.nav.home}
+                </a>
+                <a
+                  href="#services"
+                  className="block py-2"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {t.nav.services}
+                </a>
+                <a
+                  href="#pricing"
+                  className="block py-2"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {t.nav.pricing}
+                </a>
+                <a
+                  href="#works"
+                  className="block py-2"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {t.nav.works}
+                </a>
+                <a
+                  href="#how"
+                  className="block py-2"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {t.nav.how}
+                </a>
+                <a
+                  href="#faq"
+                  className="block py-2"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {t.nav.faq}
+                </a>
+                <a
+                  href="#contact"
+                  className="block py-2"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {t.nav.contact}
+                </a>
+                {/* Mobile language selector */}
+                <div className="flex items-center gap-1 pt-2">
+                  {languageOptions.map(({ code, label }) => (
+                    <button
+                      key={code}
+                      onClick={() => {
+                        setLang(code);
+                      }}
+                      className={`flex-1 text-sm px-2 py-1 rounded-md transition-colors ${
+                        lang === code
+                          ? "bg-slate-900 text-white"
+                          : "text-slate-700 hover:bg-slate-100"
+                      }`}
+                      aria-label={`Switch language to ${label}`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+                {/* Mobile CTA */}
+                <a
+                  href="#contact"
+                  className="mt-3 block rounded-2xl bg-red-600 px-4 py-2 text-center font-semibold text-white hover:bg-red-700"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {t.ctaPrimary}
+                </a>
+              </nav>
+            </div>
+          )}
         </header>
 
-        {/* Hero */}
-        <section id="home" className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-red-900 text-white">
+        {/* Hero Section */}
+        <section
+          id="home"
+          className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-red-900 text-white"
+        >
           <Container className="py-20 sm:py-28">
             <div className="grid items-center gap-12 lg:grid-cols-2">
               <div>
-                <h1 className="text-4xl font-extrabold sm:text-5xl">{t.tagline}</h1>
-                <p className="mt-4 max-w-xl text-lg text-slate-200">{t.sub}</p>
-                <div className="mt-8 flex gap-3">
-                  <Link href="#contact" className="rounded-2xl bg-red-600 px-5 py-3 font-semibold text-white hover:bg-red-700">
+                <h1 className="text-4xl font-extrabold sm:text-5xl">
+                  {t.heroTitle}
+                </h1>
+                <p className="mt-4 max-w-xl text-lg text-slate-200">
+                  {t.heroSubtitle}
+                </p>
+                <div className="mt-8 flex flex-col sm:flex-row gap-3">
+                  <a
+                    href="#contact"
+                    className="rounded-2xl bg-red-600 px-5 py-3 text-center font-semibold text-white hover:bg-red-700"
+                  >
                     {t.ctaPrimary}
-                  </Link>
-                  <Link href="#pricing" className="rounded-2xl border border-slate-300 bg-white px-5 py-3 font-semibold text-slate-900 hover:bg-slate-50">
+                  </a>
+                  <a
+                    href="#pricing"
+                    className="rounded-2xl border border-slate-300 bg-white px-5 py-3 text-center font-semibold text-slate-900 hover:bg-slate-50"
+                  >
                     {t.ctaSecondary}
-                  </Link>
-                </div>
-
-                {/* Trust micro‑copy */}
-                <div className="mt-6 flex flex-wrap items-center gap-2 text-xs/5 text-slate-300">
-                  <Badge>Made in Japan</Badge>
-                  <Badge>LINE/GBP/Hotpepper</Badge>
-                  <Badge>Reservation‑ready</Badge>
-                  <Badge>Speed, SEO, Security</Badge>
+                  </a>
                 </div>
               </div>
-
               <div className="rounded-3xl bg-white/5 p-2 ring-1 ring-white/20">
-                <div className="grid h-64 w-full place-items-center rounded-2xl bg-gradient-to-br from-white/10 to-transparent">
-                  {/* Replace with an actual mockup image */}
-                  <span className="text-sm text-white/80">Hero Image / Mockup</span>
+                <div className="h-64 w-full rounded-2xl bg-gradient-to-br from-white/10 to-transparent grid place-items-center">
+                  {/* Placeholder for hero image */}
+                  Hero Image / Mockup
                 </div>
               </div>
             </div>
           </Container>
         </section>
 
-        {/* JP localization value prop */}
-        <section className="border-b bg-white py-16" aria-labelledby="value-jp">
-          <Container>
-            <h2 id="value-jp" className="text-center text-3xl font-bold">
-              {t.valueJPTitle}
-            </h2>
-            <ul className="mx-auto mt-6 grid max-w-4xl gap-4 sm:grid-cols-2">
-              {t.valueJPBullets.map((b) => (
-                <li key={b} className="rounded-2xl border p-4 text-sm leading-6 text-slate-700">
-                  {b}
-                </li>
-              ))}
-            </ul>
-          </Container>
-        </section>
-
-        {/* Services */}
+        {/* Services Section */}
         <section id="services" className="py-20">
           <Container>
-            <h2 className="text-center text-3xl font-bold">{t.servicesTitle}</h2>
-            <p className="mt-3 text-center text-slate-600">{t.servicesSub}</p>
+            <h2 className="text-3xl font-bold text-center">{t.servicesHeading}</h2>
+            <p className="mt-3 text-center text-slate-600">
+              {t.servicesSubheading}
+            </p>
             <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {/* Website Creation */}
               <div className="rounded-3xl border p-6">
-                <h3 className="font-bold">{t.s1.h}</h3>
+                <h3 className="font-bold">{t.servicesItems.creation.title}</h3>
                 <ul className="mt-3 space-y-1 text-sm">
-                  {t.s1.items.map((i: string) => (
-                    <li key={i}>{i}</li>
+                  {t.servicesItems.creation.list.map((item) => (
+                    <li key={item}>{item}</li>
                   ))}
                 </ul>
               </div>
+              {/* Website Management */}
               <div className="rounded-3xl border p-6">
-                <h3 className="font-bold">{t.s2.h}</h3>
+                <h3 className="font-bold">{t.servicesItems.management.title}</h3>
                 <ul className="mt-3 space-y-1 text-sm">
-                  {t.s2.items.map((i: string) => (
-                    <li key={i}>{i}</li>
+                  {t.servicesItems.management.list.map((item) => (
+                    <li key={item}>{item}</li>
                   ))}
                 </ul>
               </div>
+              {/* Marketing Support */}
               <div className="rounded-3xl border p-6">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-bold">{t.s3.h}</h3>
-                  <span className="text-xs font-semibold text-red-600">{t.s3.tag}</span>
-                </div>
+                <h3 className="font-bold">{t.servicesItems.marketing.title}</h3>
+                <p className="text-xs text-red-600">
+                  {t.servicesItems.marketing.comingSoon}
+                </p>
               </div>
+              {/* Recruitment Support */}
               <div className="rounded-3xl border p-6">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-bold">{t.s4.h}</h3>
-                  <span className="text-xs font-semibold text-red-600">{t.s4.tag}</span>
-                </div>
+                <h3 className="font-bold">
+                  {t.servicesItems.recruitment.title}
+                </h3>
+                <p className="text-xs text-red-600">
+                  {t.servicesItems.recruitment.comingSoon}
+                </p>
               </div>
             </div>
           </Container>
         </section>
 
-        {/* Pricing */}
+        {/* Pricing Section */}
         <section id="pricing" className="bg-slate-50 py-20">
           <Container>
-            <h2 className="text-center text-3xl font-bold">{t.pricingTitle}</h2>
+            <h2 className="text-3xl font-bold text-center">
+              {t.pricingHeading}
+            </h2>
             <div className="mt-10 grid gap-6 lg:grid-cols-3">
-              {t.plans.map((p) => (
-                <div key={p.name} className={`rounded-3xl bg-white p-6 ${p.popular ? "border-2 border-red-600" : "border"}`}>
-                  <div className="flex items-start justify-between">
-                    <h3 className="text-lg font-bold">{p.name}</h3>
-                    {p.popular && <span className="rounded-full bg-red-50 px-2 py-1 text-xs font-semibold text-red-700">Most Popular</span>}
-                  </div>
-                  <p className="mt-2 text-slate-700">{p.price}</p>
-                  {p.features && (
-                    <ul className="mt-4 list-outside list-disc space-y-1 pl-5 text-sm text-slate-700">
-                      {p.features.map((f: string) => (
-                        <li key={f}>{f}</li>
-                      ))}
-                    </ul>
-                  )}
-                  <Link href="#contact" className="mt-6 inline-block rounded-xl bg-slate-900 px-4 py-2 font-semibold text-white hover:bg-slate-800">
-                    {t.ctaPrimary}
-                  </Link>
+              {t.pricingPlans.map((plan, idx) => (
+                <div
+                  key={idx}
+                  className={`rounded-3xl border ${
+                    plan.highlight ? "border-red-600" : ""
+                  } bg-white p-6`}
+                >
+                  <h3 className="font-bold">{plan.name}</h3>
+                  <p>{plan.price}</p>
                 </div>
               ))}
             </div>
           </Container>
         </section>
 
-        {/* How It Works */}
+        {/* How It Works Section */}
         <section id="how" className="py-20">
           <Container>
-            <h2 className="text-center text-3xl font-bold">{t.howTitle}</h2>
+            <h2 className="text-3xl font-bold text-center">{t.howHeading}</h2>
             <ol className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {t.how.map((step, idx) => (
-                <li key={step.title} className="rounded-3xl border p-6">
-                  <strong className="block">{idx + 1}. {step.title}</strong>
-                  <p className="mt-1 text-slate-700">{step.desc}</p>
+              {t.howSteps.map((step, idx) => (
+                <li
+                  key={idx}
+                  className="rounded-3xl border p-6 flex flex-col gap-2"
+                >
+                  <strong>{step.title}</strong>
+                  <p>{step.description}</p>
                 </li>
               ))}
             </ol>
           </Container>
         </section>
 
-        {/* Works & Testimonials */}
+        {/* Works & Testimonials Section */}
         <section id="works" className="bg-slate-50 py-20">
           <Container>
-            <h2 className="text-center text-3xl font-bold">{t.worksTitle}</h2>
+            <h2 className="text-3xl font-bold text-center">{t.worksHeading}</h2>
             <div className="mt-10 grid gap-6 md:grid-cols-2">
-              <div className="rounded-3xl border bg-white p-6">{t.t1}</div>
-              <div className="rounded-3xl border bg-white p-6">{t.t2}</div>
-            </div>
-          </Container>
-        </section>
-
-        {/* FAQ */}
-        <section id="faq" className="py-20">
-          <Container>
-            <h2 className="text-center text-3xl font-bold">{t.faqTitle}</h2>
-            <div className="mx-auto mt-6 max-w-2xl space-y-4">
-              {t.faqs.map((f) => (
-                <div key={f.q} className="rounded-2xl border p-4">
-                  <strong className="block">{f.q}</strong>
-                  <p className="mt-1 text-slate-700">{f.a}</p>
+              {t.worksTestimonials.map((testimonial, idx) => (
+                <div
+                  key={idx}
+                  className="rounded-3xl border bg-white p-6 text-sm"
+                >
+                  {testimonial}
                 </div>
               ))}
             </div>
           </Container>
         </section>
 
-        {/* Footer */}
+        {/* FAQ Section */}
+        <section id="faq" className="py-20">
+          <Container>
+            <h2 className="text-3xl font-bold text-center">{t.faqHeading}</h2>
+            <div className="mt-6 max-w-2xl mx-auto space-y-4">
+              {t.faqs.map((item, idx) => (
+                <div key={idx} className="rounded-2xl border p-4 text-sm">
+                  <strong>{item.question}</strong>
+                  <p>{item.answer}</p>
+                </div>
+              ))}
+            </div>
+          </Container>
+        </section>
+
+        {/* Footer / Contact Section */}
         <footer id="contact" className="border-t py-10">
           <Container>
-            <h3 className="text-xl font-bold">{t.contactTitle}</h3>
-            <form className="mt-4 grid max-w-md gap-3" aria-label="Contact form">
-              <input className="rounded-xl border px-4 py-2" placeholder={lang === "en" ? "Your Name" : "お名前"} aria-label={lang === "en" ? "Your Name" : "お名前"} />
-              <input type="email" className="rounded-xl border px-4 py-2" placeholder="Email" aria-label="Email" />
-              <input className="rounded-xl border px-4 py-2" placeholder={lang === "en" ? "LINE ID (optional)" : "LINE ID（任意）"} aria-label="LINE ID" />
-              <textarea className="rounded-xl border px-4 py-2" rows={4} placeholder={lang === "en" ? "Message" : "ご用件"} aria-label={lang === "en" ? "Message" : "ご用件"} />
-              <button type="submit" className="rounded-xl bg-red-600 px-4 py-2 font-semibold text-white hover:bg-red-700">
-                {t.ctaPrimary}
+            <h3 className="text-xl font-bold">{t.contactHeading}</h3>
+            <form className="mt-4 grid gap-3 max-w-md">
+              <input
+                className="rounded-xl border px-4 py-2"
+                placeholder={t.contactPlaceholders.name}
+              />
+              <input
+                type="email"
+                className="rounded-xl border px-4 py-2"
+                placeholder={t.contactPlaceholders.email}
+              />
+              <textarea
+                className="rounded-xl border px-4 py-2"
+                rows={4}
+                placeholder={t.contactPlaceholders.message}
+              />
+              <button
+                type="submit"
+                className="rounded-xl bg-red-600 px-4 py-2 font-semibold text-white hover:bg-red-700"
+              >
+                {t.contactButton}
               </button>
             </form>
-            <p className="mt-6 text-sm text-slate-500">{t.footerNote(year)}</p>
+            <p className="mt-6 text-sm text-slate-500">
+              © {new Date().getFullYear()} OmiseWeb LLC. All rights reserved.
+            </p>
           </Container>
         </footer>
-
-        {/* Sticky mobile contact bar (LINE first for JP) */}
-        <div className="fixed inset-x-0 bottom-0 z-40 border-t bg-white/95 p-2 sm:hidden">
-          <Container className="flex items-center gap-2 p-0">
-            <Link href="#contact" className="flex-1 rounded-xl bg-[#06C755] px-3 py-2 text-center font-semibold text-white">LINE</Link>
-            <Link href="#contact" className="flex-1 rounded-xl bg-red-600 px-3 py-2 text-center font-semibold text-white">{t.ctaPrimary}</Link>
-          </Container>
-        </div>
       </div>
     </>
   );
