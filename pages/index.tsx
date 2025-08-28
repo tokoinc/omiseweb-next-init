@@ -102,6 +102,51 @@
         </Container>
       </FadeInSection>
 
+      {/* Professional Certifications Section */}
+      <section className="py-16 bg-slate-50">
+        <Container>
+          <div className="max-w-4xl mx-auto text-center">
+            <h3 className="text-2xl font-bold text-slate-900 mb-8">
+              Certified & Compliant
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              <div className="flex flex-col items-center">
+                <div className="w-16 h-16 bg-slate-200 rounded-xl flex items-center justify-center mb-3">
+                  <svg className="w-8 h-8 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                </div>
+                <p className="text-sm font-medium text-slate-700">ISO Certified</p>
+              </div>
+              <div className="flex flex-col items-center">
+                <div className="w-16 h-16 bg-slate-200 rounded-xl flex items-center justify-center mb-3">
+                  <svg className="w-8 h-8 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                </div>
+                <p className="text-sm font-medium text-slate-700">GDPR Compliant</p>
+              </div>
+              <div className="flex flex-col items-center">
+                <div className="w-16 h-16 bg-slate-200 rounded-xl flex items-center justify-center mb-3">
+                  <svg className="w-8 h-8 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-9m0-9v9" />
+                  </svg>
+                </div>
+                <p className="text-sm font-medium text-slate-700">Web Accessibility</p>
+              </div>
+              <div className="flex flex-col items-center">
+                <div className="w-16 h-16 bg-slate-200 rounded-xl flex items-center justify-center mb-3">
+                  <svg className="w-8 h-8 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <p className="text-sm font-medium text-slate-700">Performance</p>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+
       {/* Professional FAQ Section */}
       <FadeInSection id="faq" className="py-24 bg-white">
         <Container>
@@ -114,17 +159,48 @@
             </p>
           </div>
           
-          <div className="max-w-3xl mx-auto space-y-6">
+          <div className="max-w-3xl mx-auto space-y-4">
             {t.faqs.map((faq, idx) => (
-              <div key={idx} className="bg-slate-50 rounded-xl p-6 hover:bg-slate-100 transition-colors duration-200">
-                <h3 className="text-lg font-semibold text-slate-900 mb-3">
-                  {faq.question}
-                </h3>
-                <p className="text-slate-700 leading-relaxed">
-                  {faq.answer}
-                </p>
-              </div>
+              <details key={idx} className="group bg-slate-50 rounded-xl overflow-hidden border border-slate-200 hover:border-slate-300 transition-colors duration-200">
+                <summary className="flex items-center justify-between p-6 cursor-pointer hover:bg-slate-100 transition-colors duration-200">
+                  <h3 className="text-lg font-semibold text-slate-900 pr-4">
+                    {faq.question}
+                  </h3>
+                  <div className="flex-shrink-0">
+                    <svg className="w-5 h-5 text-slate-500 transition-transform duration-200 group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </summary>
+                <div className="px-6 pb-6">
+                  <p className="text-slate-700 leading-relaxed">
+                    {faq.answer}
+                  </p>
+                </div>
+              </details>
             ))}
+          </div>
+          
+          {/* Additional support section */}
+          <div className="mt-16 max-w-2xl mx-auto text-center p-8 bg-slate-900 text-white rounded-2xl">
+            <h3 className="text-xl font-semibold mb-4">Still have questions?</h3>
+            <p className="text-slate-300 mb-6">
+              Our team of experts is here to help you make the right decision for your business.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a 
+                href="#contact" 
+                className="px-6 py-3 bg-white text-slate-900 font-semibold rounded-lg hover:bg-slate-100 transition-colors duration-200"
+              >
+                Schedule Free Consultation
+              </a>
+              <a 
+                href="mailto:hello@omiseweb.com" 
+                className="px-6 py-3 border border-slate-600 text-white font-semibold rounded-lg hover:bg-slate-800 transition-colors duration-200"
+              >
+                Email Us Directly
+              </a>
+            </div>
           </div>
         </Container>
       </FadeInSection>
@@ -429,6 +505,43 @@ const Container = ({
     {children}
   </div>
 );
+
+/**
+ * FadeInSection wraps its children in a section that fades in and slides up when
+ * it enters the viewport with enhanced animation effects.
+ */
+const FadeInSection: React.FC<{
+  id: string;
+  className?: string;
+  children: React.ReactNode;
+}> = ({ id, className = "", children }) => {
+  const ref = useRef<HTMLElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+  return (
+    <section
+      id={id}
+      ref={ref}
+      className={`${className} transform transition-all duration-1000 ease-out ${
+        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-16"
+      }`}
+    >
+      {children}
+    </section>
+  );
+};
 
 /**
  * FadeInSection wraps its children in a section that fades in and slides up when
@@ -1211,9 +1324,25 @@ export default function Home() {
             <h2 className="text-3xl sm:text-5xl font-bold mb-6 text-slate-900">
               Transparent Pricing
             </h2>
-            <p className="text-xl text-slate-600">
+            <p className="text-xl text-slate-600 mb-8">
               Choose the right plan for your business needs. No hidden fees, no surprises.
             </p>
+            
+            {/* Trust indicators */}
+            <div className="inline-flex items-center gap-6 p-4 bg-slate-50 rounded-full">
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+                <span className="text-sm font-medium text-slate-700">Money Back Guarantee</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                <span className="text-sm font-medium text-slate-700">Secure Payment</span>
+              </div>
+            </div>
           </div>
           
           <div className="grid gap-8 lg:grid-cols-3 max-w-5xl mx-auto">
