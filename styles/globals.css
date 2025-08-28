@@ -2,4 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
-html { scroll-behavior: smooth; }
+/* Import web fonts for English, Thai and Chinese text support */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+Thai:wght@400;700&family=Noto+Sans+SC:wght@400;700&display=swap');
+
+/*
+  Custom global styles.
+  You can add any additional styling here to customize fonts, scroll behavior,
+  or other global elements. Tailwind's layers are imported above.
+*/
+html {
+  scroll-behavior: smooth;
+  font-family: 'Inter', 'Noto Sans Thai', 'Noto Sans SC', sans-serif;
+}
+
+/* Example customizations */
+a {
+  @apply text-red-600 hover:text-red-700 transition-colors;
+}
+
+button {
+  @apply focus:outline-none;
+}
