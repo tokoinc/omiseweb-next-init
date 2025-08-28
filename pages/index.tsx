@@ -572,7 +572,7 @@ export default function Home() {
           playsInline
           className="absolute top-0 left-0 w-full h-full object-cover z-0"
           // Replace this with your actual video URL
-          src="https://cdn.pixabay.com/video/2024/05/27/211592_large.mp4"
+          src="https://cdn.omiseweb.com/hero04.mp4"
           onError={(e) => { e.currentTarget.style.display = 'none'; }}
         >
           Your browser does not support the video tag.
