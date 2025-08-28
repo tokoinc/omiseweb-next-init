@@ -19,6 +19,19 @@ const Container = ({
   </div>
 );
 
+/**
+ * A simple placeholder component used to reserve space for images.
+ * Each section can render this component to mark where an image will go.
+ * The height can be customised via the `height` prop (Tailwind class names).
+ */
+const Placeholder = ({ height = "h-40" }: { height?: string }) => (
+  <div
+    className={`${height} w-full rounded-3xl bg-gray-100 flex items-center justify-center text-gray-400`}
+  >
+    Image Placeholder
+  </div>
+);
+
 // Supported languages
 type Lang = "en" | "th" | "zh";
 
@@ -594,40 +607,51 @@ export default function Home() {
             <p className="mt-3 text-center text-slate-600">
               {t.servicesSubheading}
             </p>
-            <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {/* Website Creation */}
-              <div className="rounded-3xl border p-6">
-                <h3 className="font-bold">{t.servicesItems.creation.title}</h3>
-                <ul className="mt-3 space-y-1 text-sm">
-                  {t.servicesItems.creation.list.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
+            {/*
+             * Services content and image placeholder are organised in a responsive grid.
+             * On large screens the cards occupy three of five columns and the placeholder two.
+             * On smaller screens the placeholder stacks below the cards.
+             */
+            <div className="mt-10 grid gap-6 lg:grid-cols-5">
+              <div className="lg:col-span-3 grid gap-6 sm:grid-cols-2">
+                {/* Website Creation */}
+                <div className="rounded-3xl border p-6">
+                  <h3 className="font-bold">{t.servicesItems.creation.title}</h3>
+                  <ul className="mt-3 space-y-1 text-sm">
+                    {t.servicesItems.creation.list.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+                {/* Website Management */}
+                <div className="rounded-3xl border p-6">
+                  <h3 className="font-bold">{t.servicesItems.management.title}</h3>
+                  <ul className="mt-3 space-y-1 text-sm">
+                    {t.servicesItems.management.list.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+                {/* Marketing Support */}
+                <div className="rounded-3xl border p-6">
+                  <h3 className="font-bold">{t.servicesItems.marketing.title}</h3>
+                  <p className="text-xs text-red-600">
+                    {t.servicesItems.marketing.comingSoon}
+                  </p>
+                </div>
+                {/* Recruitment Support */}
+                <div className="rounded-3xl border p-6">
+                  <h3 className="font-bold">
+                    {t.servicesItems.recruitment.title}
+                  </h3>
+                  <p className="text-xs text-red-600">
+                    {t.servicesItems.recruitment.comingSoon}
+                  </p>
+                </div>
               </div>
-              {/* Website Management */}
-              <div className="rounded-3xl border p-6">
-                <h3 className="font-bold">{t.servicesItems.management.title}</h3>
-                <ul className="mt-3 space-y-1 text-sm">
-                  {t.servicesItems.management.list.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-              {/* Marketing Support */}
-              <div className="rounded-3xl border p-6">
-                <h3 className="font-bold">{t.servicesItems.marketing.title}</h3>
-                <p className="text-xs text-red-600">
-                  {t.servicesItems.marketing.comingSoon}
-                </p>
-              </div>
-              {/* Recruitment Support */}
-              <div className="rounded-3xl border p-6">
-                <h3 className="font-bold">
-                  {t.servicesItems.recruitment.title}
-                </h3>
-                <p className="text-xs text-red-600">
-                  {t.servicesItems.recruitment.comingSoon}
-                </p>
+              {/* Image placeholder for the services section */}
+              <div className="lg:col-span-2 flex items-center justify-center">
+                <Placeholder height="h-64" />
               </div>
             </div>
           </Container>
@@ -639,6 +663,10 @@ export default function Home() {
             <h2 className="text-3xl font-bold text-center">
               {t.pricingHeading}
             </h2>
+            {/* Image placeholder for the pricing section */}
+            <div className="mt-10">
+              <Placeholder height="h-48" />
+            </div>
             <div className="mt-10 grid gap-6 lg:grid-cols-3">
               {t.pricingPlans.map((plan, idx) => (
                 <div
@@ -659,6 +687,10 @@ export default function Home() {
         <section id="how" className="py-20">
           <Container>
             <h2 className="text-3xl font-bold text-center">{t.howHeading}</h2>
+            {/* Image placeholder for the how-it-works section */}
+            <div className="mt-10">
+              <Placeholder height="h-48" />
+            </div>
             <ol className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {t.howSteps.map((step, idx) => (
                 <li
@@ -677,6 +709,10 @@ export default function Home() {
         <section id="works" className="bg-slate-50 py-20">
           <Container>
             <h2 className="text-3xl font-bold text-center">{t.worksHeading}</h2>
+            {/* Image placeholder for the works section */}
+            <div className="mt-10">
+              <Placeholder height="h-48" />
+            </div>
             <div className="mt-10 grid gap-6 md:grid-cols-2">
               {t.worksTestimonials.map((testimonial, idx) => (
                 <div
