@@ -76,62 +76,6 @@ const ScrollTopButton: React.FC<{
   );
 };
 
-/**
- * Enhanced placeholder with gradient backgrounds
- */
-const Placeholder = ({ height = "h-40", children = "Image Placeholder" }: { height?: string; children?: React.ReactNode }) => (
-  <div
-    className={`${height} w-full rounded-3xl bg-gradient-to-br from-slate-100 via-slate-50 to-white shadow-inner border border-slate-200/50 flex items-center justify-center text-slate-400 font-medium relative overflow-hidden group`}
-  >
-    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-    <div className="relative z-10">{children}</div>
-  </div>
-);
-
-/**
- * Floating card component for services
- */
-const ServiceCard: React.FC<{
-  title: string;
-  children: React.ReactNode;
-  delay?: number;
-  highlight?: boolean;
-}> = ({ title, children, delay = 0, highlight = false }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setIsVisible(true), delay);
-    return () => clearTimeout(timer);
-  }, [delay]);
-
-  return (
-    <div
-      ref={ref}
-      className={`group relative rounded-3xl border border-slate-200/50 bg-white/80 backdrop-blur-sm p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform ${
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-      } ${highlight ? "ring-2 ring-red-500/20 bg-gradient-to-br from-red-50/50 to-white" : ""} hover:-translate-y-2`}
-    >
-      <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-      <div className="relative z-10">
-        <h3 className="font-bold text-xl text-slate-900 mb-4 group-hover:text-red-600 transition-colors duration-300">{title}</h3>
-        {children}
-      </div>
-    </div>
-  );
-};
-
-/**
- * Animated background elements
- */
-const FloatingElements = () => (
-  <div className="absolute inset-0 overflow-hidden pointer-events-none">
-    <div className="absolute -top-20 -left-20 w-72 h-72 bg-red-500/10 rounded-full blur-3xl animate-pulse"></div>
-    <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-slate-500/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
-    <div className="absolute top-1/2 left-1/4 w-48 h-48 bg-red-400/5 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '4s' }}></div>
-  </div>
-);
-
 // Supported languages
 type Lang = "en" | "th" | "zh";
 
@@ -179,7 +123,7 @@ const messages: Record<Lang, {
     nav: {
       home: "Home",
       services: "Services",
-      pricing: "Pricing", 
+      pricing: "Pricing",
       works: "Portfolio",
       how: "Process",
       faq: "FAQ",
@@ -214,7 +158,7 @@ const messages: Record<Lang, {
       },
       recruitment: {
         title: "Staff Recruitment",
-        comingSoon: "Coming Q3 2025", 
+        comingSoon: "Coming Q3 2025",
         description: "Bilingual staff hiring support"
       },
     },
@@ -367,7 +311,7 @@ const messages: Record<Lang, {
     heroSubtitle: "为国际企业提供专业的网站创建和管理服务。从概念到上线仅需2周。",
     ctaPrimary: "开始项目",
     ctaSecondary: "查看价格",
-    servicesHeading: "完整的网络解决方案", 
+    servicesHeading: "完整的网络解决方案",
     servicesSubheading: "在日本竞争激烈的市场中建立强大数字化形象所需的一切。",
     servicesItems: {
       creation: {
@@ -444,7 +388,7 @@ const messages: Record<Lang, {
 };
 
 /**
- * The main Home component with professional design upgrades.
+ * The main Home component with professional design upgrades including video and images.
  */
 export default function Home() {
   const [lang, setLang] = useState<Lang>("en");
@@ -488,6 +432,16 @@ export default function Home() {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  // Portfolio images
+  const portfolioImages = [
+    "https://placehold.co/600x400/f87171/ffffff?text=Restaurant+Site",
+    "https://placehold.co/600x400/34d399/ffffff?text=Salon+Booking",
+    "https://placehold.co/600x400/60a5fa/ffffff?text=Cafe+Menu",
+    "https://placehold.co/600x400/fbbf24/ffffff?text=Boutique+Shop",
+    "https://placehold.co/600x400/a78bfa/ffffff?text=Event+Page",
+    "https://placehold.co/600x400/f472b6/ffffff?text=Nail+Art+Studio",
+  ];
 
   return (
     <div className="min-h-screen bg-white text-slate-900 flex flex-col">
@@ -610,90 +564,60 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Professional Hero Section */}
+      {/* Professional Hero Section with Video Background */}
       <section
         id="home"
-        className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-slate-100 pt-16"
+        className="relative min-h-screen flex items-center justify-center text-white pt-16 overflow-hidden"
       >
-        {/* Subtle background pattern */}
-        <div className="absolute inset-0 opacity-[0.02]">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `radial-gradient(circle at 1px 1px, rgba(0,0,0,0.15) 1px, transparent 0)`,
-            backgroundSize: '24px 24px'
-          }}></div>
-        </div>
+        {/* Video Background */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute top-0 left-0 w-full h-full object-cover z-0"
+          // Replace this with your actual video URL
+          src="https://cdn.pixabay.com/video/2024/05/27/211592_large.mp4"
+          onError={(e) => { e.currentTarget.style.display = 'none'; }}
+        >
+          Your browser does not support the video tag.
+        </video>
+        {/* Fallback Background */}
+         <div className="absolute inset-0 bg-slate-50 z-[-1]"></div>
 
-        <Container className="relative z-10 py-20 sm:py-32">
+        {/* Overlay to ensure text readability */}
+        <div className="absolute top-0 left-0 w-full h-full bg-black/50 z-10"></div>
+
+        <Container className="relative z-20 py-20 sm:py-32">
           <div className="max-w-4xl mx-auto text-center">
             {/* Professional trust badge */}
-            <div className="mb-8 inline-flex items-center px-4 py-2 bg-slate-900 text-white text-sm font-medium rounded-full">
+            <div className="mb-8 inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm text-white text-sm font-medium rounded-full border border-white/20">
               <span className="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
               Trusted by 200+ businesses across Japan
             </div>
             
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-8 text-slate-900">
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-8 text-white shadow-text">
               {t.heroTitle}
             </h1>
             
-            <p className="text-xl sm:text-2xl text-slate-600 mb-12 leading-relaxed max-w-3xl mx-auto">
+            <p className="text-xl sm:text-2xl text-slate-200 mb-12 leading-relaxed max-w-3xl mx-auto">
               {t.heroSubtitle}
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <a
                 href="#contact"
-                className="px-8 py-4 bg-slate-900 text-white font-semibold rounded-lg hover:bg-slate-800 transition-colors duration-200 shadow-lg hover:shadow-xl"
+                className="px-8 py-4 bg-white text-slate-900 font-semibold rounded-lg hover:bg-slate-200 transition-colors duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
               >
                 {t.ctaPrimary}
               </a>
               
               <a
                 href="#pricing"
-                className="px-8 py-4 border border-slate-300 text-slate-700 font-semibold rounded-lg hover:bg-slate-50 transition-colors duration-200"
+                className="px-8 py-4 border border-white/50 text-white font-semibold rounded-lg hover:bg-white/10 backdrop-blur-sm transition-colors duration-200"
               >
                 {t.ctaSecondary}
               </a>
-            </div>
-
-            {/* Professional trust indicators */}
-            <div className="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-8 max-w-3xl mx-auto">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-slate-900 mb-1">200+</div>
-                <div className="text-sm text-slate-600">Successful Projects</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-slate-900 mb-1">2 Weeks</div>
-                <div className="text-sm text-slate-600">Average Delivery</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-slate-900 mb-1">4.9/5</div>
-                <div className="text-sm text-slate-600">Client Satisfaction</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-slate-900 mb-1">24/7</div>
-                <div className="text-sm text-slate-600">Support Available</div>
-              </div>
-            </div>
-
-            {/* Client logos section */}
-            <div className="mt-20 pt-16 border-t border-slate-200">
-              <p className="text-center text-sm font-medium text-slate-500 mb-8">
-                TRUSTED BY LEADING BUSINESSES IN JAPAN
-              </p>
-              <div className="flex items-center justify-center gap-8 opacity-60">
-                <div className="w-20 h-12 bg-slate-200 rounded-lg flex items-center justify-center text-xs font-semibold text-slate-500">
-                  BRAND 1
-                </div>
-                <div className="w-20 h-12 bg-slate-200 rounded-lg flex items-center justify-center text-xs font-semibold text-slate-500">
-                  BRAND 2
-                </div>
-                <div className="w-20 h-12 bg-slate-200 rounded-lg flex items-center justify-center text-xs font-semibold text-slate-500">
-                  BRAND 3
-                </div>
-                <div className="w-20 h-12 bg-slate-200 rounded-lg flex items-center justify-center text-xs font-semibold text-slate-500">
-                  BRAND 4
-                </div>
-              </div>
             </div>
           </div>
         </Container>
@@ -775,17 +699,9 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Professional showcase placeholder */}
-          <div className="bg-slate-50 rounded-2xl p-12 text-center">
-            <div className="max-w-lg mx-auto">
-              <div className="w-16 h-16 bg-slate-200 rounded-xl mx-auto mb-6 flex items-center justify-center">
-                <svg className="w-8 h-8 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold text-slate-900 mb-3">Professional Portfolio</h3>
-              <p className="text-slate-600">View our latest work and successful client implementations.</p>
-            </div>
+          {/* Visual Showcase */}
+          <div className="bg-slate-50 rounded-2xl p-8 lg:p-12">
+             <img src="https://placehold.co/1200x600/e2e8f0/475569?text=Responsive+Design+Showcase" alt="Website design showcase" className="rounded-xl shadow-lg w-full" />
           </div>
         </Container>
       </FadeInSection>
@@ -802,7 +718,7 @@ export default function Home() {
             </p>
             
             {/* Trust indicators */}
-            <div className="inline-flex items-center gap-6 p-4 bg-slate-50 rounded-full">
+            <div className="inline-flex items-center gap-6 p-4 bg-white rounded-full shadow-sm border border-slate-200">
               <div className="flex items-center gap-2">
                 <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -822,7 +738,7 @@ export default function Home() {
             {t.pricingPlans.map((plan, idx) => (
               <div
                 key={idx}
-                className={`relative p-8 rounded-2xl border transition-all duration-200 hover:shadow-lg ${
+                className={`relative p-8 rounded-2xl border transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 ${
                   plan.highlight
                     ? "bg-slate-900 text-white border-slate-800 shadow-xl"
                     : "bg-white border-slate-200 hover:border-slate-300"
@@ -830,7 +746,7 @@ export default function Home() {
               >
                 {plan.highlight && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <span className="bg-slate-700 text-white px-4 py-2 rounded-full text-sm font-semibold">
+                    <span className="bg-red-500 text-white px-4 py-2 rounded-full text-sm font-semibold">
                       Recommended
                     </span>
                   </div>
@@ -873,9 +789,9 @@ export default function Home() {
                 
                 <a
                   href="#contact"
-                  className={`block w-full py-3 px-6 rounded-lg text-center font-semibold transition-colors duration-200 ${
+                  className={`block w-full py-3 px-6 rounded-lg text-center font-semibold transition-all duration-200 ${
                     plan.highlight
-                      ? "bg-white text-slate-900 hover:bg-slate-100"
+                      ? "bg-white text-slate-900 hover:bg-slate-200"
                       : "bg-slate-900 text-white hover:bg-slate-800"
                   }`}
                 >
@@ -903,11 +819,11 @@ export default function Home() {
             {t.howSteps.map((step, idx) => (
               <div key={idx} className="text-center">
                 <div className="relative mb-8">
-                  <div className="w-16 h-16 mx-auto bg-slate-900 text-white rounded-2xl flex items-center justify-center text-2xl font-bold shadow-lg">
-                    {idx + 1}
+                  <div className="w-16 h-16 mx-auto bg-slate-100 text-slate-800 rounded-2xl flex items-center justify-center text-2xl font-bold shadow-lg border border-slate-200">
+                    <span className="text-3xl">{step.icon}</span>
                   </div>
                   {idx < t.howSteps.length - 1 && (
-                    <div className="hidden lg:block absolute top-8 left-full w-full h-0.5 bg-slate-200 -translate-x-8"></div>
+                    <div className="hidden lg:block absolute top-8 left-1/2 w-full h-0.5 bg-slate-200"></div>
                   )}
                 </div>
                 <h3 className="text-xl font-semibold text-slate-900 mb-3">
@@ -974,67 +890,18 @@ export default function Home() {
           </div>
           
           {/* Professional portfolio showcase */}
-          <div className="bg-white p-12 rounded-2xl border border-slate-200 text-center">
-            <div className="max-w-lg mx-auto">
-              <div className="w-16 h-16 bg-slate-100 rounded-2xl mx-auto mb-6 flex items-center justify-center">
-                <svg className="w-8 h-8 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                </svg>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {portfolioImages.map((src, index) => (
+              <div key={index} className="group relative overflow-hidden rounded-xl">
+                <img src={src} alt={`Portfolio item ${index + 1}`} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
+                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
+                   <p className="text-white text-center font-semibold">View Project</p>
+                </div>
               </div>
-              <h3 className="text-xl font-semibold text-slate-900 mb-3">View Our Portfolio</h3>
-              <p className="text-slate-600 mb-6">Explore successful projects across various industries in Japan.</p>
-              <a href="#contact" className="inline-flex items-center px-6 py-3 bg-slate-900 text-white font-semibold rounded-lg hover:bg-slate-800 transition-colors duration-200">
-                Request Portfolio Access
-              </a>
-            </div>
+            ))}
           </div>
         </Container>
       </FadeInSection>
-
-      {/* Professional Certifications Section */}
-      <section className="py-16 bg-slate-50">
-        <Container>
-          <div className="max-w-4xl mx-auto text-center">
-            <h3 className="text-2xl font-bold text-slate-900 mb-8">
-              Certified & Compliant
-            </h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              <div className="flex flex-col items-center">
-                <div className="w-16 h-16 bg-slate-200 rounded-xl flex items-center justify-center mb-3">
-                  <svg className="w-8 h-8 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                  </svg>
-                </div>
-                <p className="text-sm font-medium text-slate-700">ISO Certified</p>
-              </div>
-              <div className="flex flex-col items-center">
-                <div className="w-16 h-16 bg-slate-200 rounded-xl flex items-center justify-center mb-3">
-                  <svg className="w-8 h-8 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                </div>
-                <p className="text-sm font-medium text-slate-700">GDPR Compliant</p>
-              </div>
-              <div className="flex flex-col items-center">
-                <div className="w-16 h-16 bg-slate-200 rounded-xl flex items-center justify-center mb-3">
-                  <svg className="w-8 h-8 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-9m0-9v9" />
-                  </svg>
-                </div>
-                <p className="text-sm font-medium text-slate-700">Web Accessibility</p>
-              </div>
-              <div className="flex flex-col items-center">
-                <div className="w-16 h-16 bg-slate-200 rounded-xl flex items-center justify-center mb-3">
-                  <svg className="w-8 h-8 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-                <p className="text-sm font-medium text-slate-700">Performance</p>
-              </div>
-            </div>
-          </div>
-        </Container>
-      </section>
 
       {/* Professional FAQ Section */}
       <FadeInSection id="faq" className="py-24 bg-white">
@@ -1077,14 +944,14 @@ export default function Home() {
               Our team of experts is here to help you make the right decision for your business.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a 
-                href="#contact" 
+              <a
+                href="#contact"
                 className="px-6 py-3 bg-white text-slate-900 font-semibold rounded-lg hover:bg-slate-100 transition-colors duration-200"
               >
                 Schedule Free Consultation
               </a>
-              <a 
-                href="mailto:hello@omiseweb.com" 
+              <a
+                href="mailto:hello@omiseweb.com"
                 className="px-6 py-3 border border-slate-600 text-white font-semibold rounded-lg hover:bg-slate-800 transition-colors duration-200"
               >
                 Email Us Directly
@@ -1196,7 +1063,7 @@ export default function Home() {
                 <span className="text-xl font-semibold text-white">OmiseWeb</span>
               </div>
               <p className="text-slate-400 mb-6 max-w-md leading-relaxed">
-                Professional web solutions for international businesses in Japan. 
+                Professional web solutions for international businesses in Japan.
                 Trusted by 200+ successful projects since 2023.
               </p>
               <div className="flex gap-4">
