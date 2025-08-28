@@ -136,7 +136,45 @@ const FloatingElements = () => (
 type Lang = "en" | "th" | "zh";
 
 // Enhanced translations with better copy
-const messages: Record<Lang, any> = {
+const messages: Record<Lang, {
+  nav: Record<string, string>;
+  heroTitle: string;
+  heroSubtitle: string;
+  ctaPrimary: string;
+  ctaSecondary: string;
+  servicesHeading: string;
+  servicesSubheading: string;
+  servicesItems: {
+    creation: { title: string; list: string[] };
+    management: { title: string; list: string[] };
+    marketing: { title: string; comingSoon: string; description: string };
+    recruitment: { title: string; comingSoon: string; description: string };
+  };
+  pricingHeading: string;
+  pricingPlans: Array<{
+    name: string;
+    price: string;
+    monthly: string;
+    description: string;
+    features: string[];
+    highlight?: boolean;
+  }>;
+  howHeading: string;
+  howSteps: Array<{ title: string; description: string; icon: string }>;
+  worksHeading: string;
+  worksTestimonials: Array<{ text: string; author: string; role: string }>;
+  faqHeading: string;
+  faqs: Array<{ question: string; answer: string }>;
+  contactHeading: string;
+  contactSubheading: string;
+  contactPlaceholders: {
+    name: string;
+    email: string;
+    business: string;
+    message: string;
+  };
+  contactButton: string;
+}> = {
   en: {
     nav: {
       home: "Home",
@@ -468,7 +506,7 @@ export default function Home() {
 
           {/* Enhanced desktop navigation */}
           <nav className="hidden lg:flex items-center gap-8 text-sm font-semibold">
-            {Object.entries(t.nav).map(([key, label]) => (
+            {(Object.keys(t.nav) as Array<keyof typeof t.nav>).map((key) => (
               <a
                 key={key}
                 href={`#${key}`}
@@ -479,7 +517,7 @@ export default function Home() {
                 }`}
                 onClick={() => setMenuOpen(false)}
               >
-                {label}
+                {t.nav[key]}
                 {activeSection === key && (
                   <div className="absolute inset-0 rounded-full bg-red-100 -z-10"></div>
                 )}
@@ -532,14 +570,14 @@ export default function Home() {
           isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
         }`}>
           <nav className="px-4 py-6 space-y-4">
-            {Object.entries(t.nav).map(([key, label]) => (
+            {(Object.keys(t.nav) as Array<keyof typeof t.nav>).map((key) => (
               <a
                 key={key}
                 href={`#${key}`}
                 className="block py-3 px-4 rounded-xl text-slate-700 hover:text-red-600 hover:bg-red-50 transition-colors duration-200 font-medium"
                 onClick={() => setMenuOpen(false)}
               >
-                {label}
+                {t.nav[key]}
               </a>
             ))}
             
@@ -667,7 +705,7 @@ export default function Home() {
           <div className="grid gap-8 lg:grid-cols-2 xl:grid-cols-4 mb-16">
             <ServiceCard title={t.servicesItems.creation.title} delay={0}>
               <div className="space-y-3">
-                {t.servicesItems.creation.list.map((item: string, idx: number) => (
+                {t.servicesItems.creation.list.map((item, idx) => (
                   <div key={idx} className="flex items-center gap-3 text-slate-600">
                     <div className="w-2 h-2 bg-red-500 rounded-full"></div>
                     <span>{item}</span>
@@ -678,7 +716,7 @@ export default function Home() {
 
             <ServiceCard title={t.servicesItems.management.title} delay={200} highlight>
               <div className="space-y-3">
-                {t.servicesItems.management.list.map((item: string, idx: number) => (
+                {t.servicesItems.management.list.map((item, idx) => (
                   <div key={idx} className="flex items-center gap-3 text-slate-600">
                     <div className="w-2 h-2 bg-red-500 rounded-full"></div>
                     <span>{item}</span>
@@ -734,7 +772,7 @@ export default function Home() {
           </div>
           
           <div className="grid gap-8 lg:grid-cols-3 max-w-6xl mx-auto">
-            {t.pricingPlans.map((plan: any, idx: number) => (
+            {t.pricingPlans.map((plan, idx) => (
               <div
                 key={idx}
                 className={`relative rounded-3xl p-8 ${
@@ -770,7 +808,7 @@ export default function Home() {
                 </div>
                 
                 <ul className="space-y-3 mb-8">
-                  {plan.features.map((feature: string, featureIdx: number) => (
+                  {plan.features.map((feature, featureIdx) => (
                     <li key={featureIdx} className="flex items-center gap-3">
                       <div className={`w-5 h-5 rounded-full flex items-center justify-center ${
                         plan.highlight ? 'bg-white/20' : 'bg-red-100'
@@ -812,7 +850,7 @@ export default function Home() {
           </div>
           
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {t.howSteps.map((step: any, idx: number) => (
+            {t.howSteps.map((step, idx) => (
               <div
                 key={idx}
                 className="group relative text-center p-8 rounded-3xl border border-slate-200 bg-gradient-to-b from-white to-slate-50 hover:shadow-xl transition-all duration-500 hover:-translate-y-4"
@@ -849,7 +887,7 @@ export default function Home() {
           </div>
           
           <div className="grid gap-12 lg:grid-cols-2 mb-16">
-            {t.worksTestimonials.map((testimonial: any, idx: number) => (
+            {t.worksTestimonials.map((testimonial, idx) => (
               <div
                 key={idx}
                 className="group relative p-8 rounded-3xl bg-white border border-slate-200 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
@@ -903,7 +941,7 @@ export default function Home() {
           </div>
           
           <div className="max-w-4xl mx-auto space-y-6">
-            {t.faqs.map((faq: any, idx: number) => (
+            {t.faqs.map((faq, idx) => (
               <div
                 key={idx}
                 className="group rounded-3xl border border-slate-200 bg-gradient-to-r from-white to-slate-50 p-8 hover:shadow-xl transition-all duration-300"
@@ -1044,13 +1082,13 @@ export default function Home() {
             <div>
               <h4 className="text-lg font-bold mb-6 text-white">Quick Links</h4>
               <nav className="space-y-3">
-                {Object.entries(t.nav).map(([key, label]) => (
+                {(Object.keys(t.nav) as Array<keyof typeof t.nav>).map((key) => (
                   <a
                     key={key}
                     href={`#${key}`}
                     className="block text-slate-400 hover:text-red-400 transition-colors duration-200"
                   >
-                    {label}
+                    {t.nav[key]}
                   </a>
                 ))}
               </nav>
