@@ -611,7 +611,7 @@ export default function Home() {
              * Services content and image placeholder are organised in a responsive grid.
              * On large screens the cards occupy three of five columns and the placeholder two.
              * On smaller screens the placeholder stacks below the cards.
-             */
+             */}
             <div className="mt-10 grid gap-6 lg:grid-cols-5">
               <div className="lg:col-span-3 grid gap-6 sm:grid-cols-2">
                 {/* Website Creation */}
