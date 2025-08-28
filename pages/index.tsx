@@ -632,13 +632,11 @@ export default function Home() {
             </div>
             
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-8 text-slate-900">
-              Professional Websites for
-              <span className="block text-slate-700">Japanese Market Success</span>
+              {t.heroTitle}
             </h1>
             
             <p className="text-xl sm:text-2xl text-slate-600 mb-12 leading-relaxed max-w-3xl mx-auto">
-              Expert website creation and management for restaurants and salons. 
-              Launch your digital presence in Japan with confidence.
+              {t.heroSubtitle}
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -646,14 +644,14 @@ export default function Home() {
                 href="#contact"
                 className="px-8 py-4 bg-slate-900 text-white font-semibold rounded-lg hover:bg-slate-800 transition-colors duration-200 shadow-lg hover:shadow-xl"
               >
-                Start Your Project
+                {t.ctaPrimary}
               </a>
               
               <a
                 href="#pricing"
                 className="px-8 py-4 border border-slate-300 text-slate-700 font-semibold rounded-lg hover:bg-slate-50 transition-colors duration-200"
               >
-                View Pricing
+                {t.ctaSecondary}
               </a>
             </div>
 
@@ -706,10 +704,10 @@ export default function Home() {
         <Container>
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-3xl sm:text-5xl font-bold mb-6 text-slate-900">
-              Comprehensive Web Solutions
+              {t.servicesHeading}
             </h2>
             <p className="text-xl text-slate-600 leading-relaxed">
-              Professional services designed specifically for international businesses entering the Japanese market.
+              {t.servicesSubheading}
             </p>
           </div>
 
@@ -720,7 +718,7 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-slate-900 mb-4">Website Creation</h3>
+              <h3 className="text-xl font-semibold text-slate-900 mb-4">{t.servicesItems.creation.title}</h3>
               <ul className="space-y-2 text-slate-600">
                 {t.servicesItems.creation.list.map((item, idx) => (
                   <li key={idx} className="flex items-start gap-2">
@@ -738,7 +736,7 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-4">Ongoing Management</h3>
+              <h3 className="text-xl font-semibold mb-4">{t.servicesItems.management.title}</h3>
               <p className="text-white/80 text-sm mb-4">Most Popular</p>
               <ul className="space-y-2 text-white/90">
                 {t.servicesItems.management.list.map((item, idx) => (
@@ -756,7 +754,7 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-slate-900 mb-4">Digital Marketing</h3>
+              <h3 className="text-xl font-semibold text-slate-900 mb-4">{t.servicesItems.marketing.title}</h3>
               <div className="inline-block px-3 py-1 bg-slate-200 text-slate-700 text-xs font-medium rounded-full mb-4">
                 {t.servicesItems.marketing.comingSoon}
               </div>
@@ -769,7 +767,7 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-slate-900 mb-4">Staff Recruitment</h3>
+              <h3 className="text-xl font-semibold text-slate-900 mb-4">{t.servicesItems.recruitment.title}</h3>
               <div className="inline-block px-3 py-1 bg-slate-200 text-slate-700 text-xs font-medium rounded-full mb-4">
                 {t.servicesItems.recruitment.comingSoon}
               </div>
@@ -797,7 +795,7 @@ export default function Home() {
         <Container>
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-3xl sm:text-5xl font-bold mb-6 text-slate-900">
-              Transparent Pricing
+              {t.pricingHeading}
             </h2>
             <p className="text-xl text-slate-600 mb-8">
               Choose the right plan for your business needs. No hidden fees, no surprises.
@@ -894,7 +892,7 @@ export default function Home() {
         <Container>
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-3xl sm:text-5xl font-bold mb-6 text-slate-900">
-              Our Process
+              {t.howHeading}
             </h2>
             <p className="text-xl text-slate-600">
               A proven methodology that delivers results in just 2 weeks.
@@ -929,7 +927,7 @@ export default function Home() {
         <Container>
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-3xl sm:text-5xl font-bold mb-6 text-slate-900">
-              Client Success Stories
+              {t.worksHeading}
             </h2>
             <p className="text-xl text-slate-600">
               Trusted by businesses across Japan for professional web solutions.
@@ -1043,7 +1041,7 @@ export default function Home() {
         <Container>
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-3xl sm:text-5xl font-bold mb-6 text-slate-900">
-              Frequently Asked Questions
+              {t.faqHeading}
             </h2>
             <p className="text-xl text-slate-600">
               Everything you need to know about our services and process.
@@ -1102,10 +1100,10 @@ export default function Home() {
           <div className="grid gap-16 lg:grid-cols-2 items-start">
             <div>
               <h2 className="text-3xl sm:text-5xl font-bold mb-6">
-                Ready to Get Started?
+                {t.contactHeading}
               </h2>
               <p className="text-xl text-slate-300 mb-8 leading-relaxed">
-                Contact our team for a free consultation and detailed project proposal.
+                {t.contactSubheading}
               </p>
               
               <div className="space-y-6">
