@@ -629,7 +629,7 @@ export default function Home() {
           {/* Logo */}
           <a href="#home" className="flex items-center">
             <img
-              src="https://cdn.omiseweb.com/logo01.png"
+              src="https://cdn.omiseweb.com/logo02.png"
               alt="OmiseWeb Logo"
               className="h-8 w-auto"
             />
@@ -773,7 +773,7 @@ export default function Home() {
           playsInline
           className="absolute top-0 left-0 w-full h-full object-cover z-0"
           // Replace this with your actual video URL
-          src="https://cdn.pixabay.com/video/2024/05/27/211592_large.mp4"
+          src="https://cdn.omiseweb.com/hero04.mp4"
           onError={(e) => {
             e.currentTarget.style.display = "none";
           }}
@@ -1456,7 +1456,7 @@ export default function Home() {
             <div className="lg:col-span-2">
               <a href="#home" className="inline-block mb-4">
                 <img
-                  src="https://cdn.omiseweb.com/logo01.png"
+                  src="https://cdn.omiseweb.com/logo02.png"
                   alt="OmiseWeb Logo"
                   className="h-8 w-auto"
                 />
