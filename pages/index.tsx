@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { ReactNode } from "react";
 
 /**
@@ -18,6 +18,68 @@ const Container = ({
     {children}
   </div>
 );
+
+/**
+ * FadeInSection wraps its children in a section that fades in and slides up when
+ * it enters the viewport. This uses the IntersectionObserver API via a
+ * useEffect hook. When the section is at least 20% visible, the animation
+ * triggers once and then the observer disconnects. An id and custom
+ * className can be passed through to control the section's styling and
+ * anchoring.
+ */
+const FadeInSection: React.FC<{
+  id: string;
+  className?: string;
+  children: React.ReactNode;
+}> = ({ id, className = "", children }) => {
+  const ref = useRef<HTMLElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.2 }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+  return (
+    <section
+      id={id}
+      ref={ref}
+      className={`${className} transform transition-all duration-700 ease-out ${
+        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+      }`}
+    >
+      {children}
+    </section>
+  );
+};
+
+/**
+ * ScrollTopButton renders a floating button that appears when the user
+ * scrolls down the page. Clicking the button scrolls the window back to
+ * the top with a smooth animation. The visibility is controlled externally.
+ */
+const ScrollTopButton: React.FC<{
+  show: boolean;
+  onClick: () => void;
+}> = ({ show, onClick }) => {
+  if (!show) return null;
+  return (
+    <button
+      onClick={onClick}
+      className="fixed bottom-4 right-4 z-50 p-3 rounded-full bg-red-600 text-white shadow-lg hover:bg-red-700 focus:outline-none"
+      aria-label="Scroll back to top"
+    >
+      ↑
+    </button>
+  );
+};
 
 /**
  * A simple placeholder component used to reserve space for images.
@@ -357,6 +419,7 @@ const messages: Record<
 export default function Home() {
   const [lang, setLang] = useState<Lang>("en");
   const [isMenuOpen, setMenuOpen] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
   const t = messages[lang];
 
   // List of available languages for the selector
@@ -365,6 +428,26 @@ export default function Home() {
     { code: "th", label: "TH" },
     { code: "zh", label: "CH" },
   ];
+
+  // Monitor scroll position to toggle the scroll-to-top button
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  // Scroll smoothly to the top of the page
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
     <>
@@ -601,7 +684,7 @@ export default function Home() {
         </section>
 
         {/* Services Section */}
-        <section id="services" className="py-20">
+        <FadeInSection id="services" className="py-20">
           <Container>
             <h2 className="text-3xl font-bold text-center">{t.servicesHeading}</h2>
             <p className="mt-3 text-center text-slate-600">
@@ -655,10 +738,10 @@ export default function Home() {
               </div>
             </div>
           </Container>
-        </section>
+        </FadeInSection>
 
         {/* Pricing Section */}
-        <section id="pricing" className="bg-slate-50 py-20">
+        <FadeInSection id="pricing" className="bg-slate-50 py-20">
           <Container>
             <h2 className="text-3xl font-bold text-center">
               {t.pricingHeading}
@@ -681,10 +764,10 @@ export default function Home() {
               ))}
             </div>
           </Container>
-        </section>
+        </FadeInSection>
 
         {/* How It Works Section */}
-        <section id="how" className="py-20">
+        <FadeInSection id="how" className="py-20">
           <Container>
             <h2 className="text-3xl font-bold text-center">{t.howHeading}</h2>
             {/* Image placeholder for the how-it-works section */}
@@ -703,10 +786,10 @@ export default function Home() {
               ))}
             </ol>
           </Container>
-        </section>
+        </FadeInSection>
 
         {/* Works & Testimonials Section */}
-        <section id="works" className="bg-slate-50 py-20">
+        <FadeInSection id="works" className="bg-slate-50 py-20">
           <Container>
             <h2 className="text-3xl font-bold text-center">{t.worksHeading}</h2>
             {/* Image placeholder for the works section */}
@@ -724,10 +807,10 @@ export default function Home() {
               ))}
             </div>
           </Container>
-        </section>
+        </FadeInSection>
 
         {/* FAQ Section */}
-        <section id="faq" className="py-20">
+        <FadeInSection id="faq" className="py-20">
           <Container>
             <h2 className="text-3xl font-bold text-center">{t.faqHeading}</h2>
             <div className="mt-6 max-w-2xl mx-auto space-y-4">
@@ -739,7 +822,7 @@ export default function Home() {
               ))}
             </div>
           </Container>
-        </section>
+        </FadeInSection>
 
         {/* Footer / Contact Section */}
         <footer id="contact" className="border-t py-10">
@@ -772,6 +855,8 @@ export default function Home() {
             </p>
           </Container>
         </footer>
+        {/* Scroll-to-top floating button */}
+        <ScrollTopButton show={showScrollTop} onClick={scrollToTop} />
       </div>
     </>
   );
