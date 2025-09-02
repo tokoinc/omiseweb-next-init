@@ -565,29 +565,15 @@ export default function Home() {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
-  
-  const [isLangMenuOpen, setLangMenuOpen] = useState(false);
-  const langMenuRef = useRef<HTMLDivElement>(null);
-
+  const [isLangPopupOpen, setLangPopupOpen] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
   const t = messages[lang];
 
-  const languageOptions: { code: Lang; label: string; short: string; }[] = [
-    { code: "en", label: "English", short: "EN" },
-    { code: "th", label: "ภาษาไทย", short: "TH" },
-    { code: "zh", label: "中文", short: "CH" },
+  const languageOptions: { code: Lang; label: string; fullName: string }[] = [
+    { code: "en", label: "EN", fullName: "English" },
+    { code: "th", label: "TH", fullName: "ไทย (Thai)" },
+    { code: "zh", label: "CH", fullName: "中文 (Chinese)" },
   ];
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (langMenuRef.current && !langMenuRef.current.contains(event.target as Node)) {
-        setLangMenuOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [langMenuRef]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -626,373 +612,280 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 flex flex-col">
-      <header className="fixed top-0 z-50 w-full border-b border-slate-200/50 bg-white/95 backdrop-blur-sm supports-[backdrop-filter]:bg-white/90">
-        <Container className="flex h-16 items-center justify-between">
-          <a href="#home" className="flex items-center">
-            <img
-              src="https://cdn.omiseweb.com/logo02.png"
-              alt="OmiseWeb Logo"
-              className="h-8 w-auto"
-            />
-          </a>
-
-          <nav className="hidden lg:flex items-center gap-6 text-sm font-medium">
-            {(Object.keys(t.nav) as Array<keyof typeof t.nav>).map((key) => (
-              <a
-                key={key}
-                href={`#${key}`}
-                className={`px-3 py-2 rounded-lg transition-colors duration-200 ${
-                  activeSection === key
-                    ? "text-slate-900 bg-slate-100"
-                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
-                }`}
-                onClick={() => setMenuOpen(false)}
-              >
-                {t.nav[key]}
-              </a>
-            ))}
-          </nav>
-
-          <div className="hidden lg:flex items-center gap-4">
-            <div className="flex items-center gap-1">
-              {languageOptions.map(({ code, short }) => (
-                <button
-                  key={code}
-                  onClick={() => setLang(code)}
-                  className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors duration-200 ${
-                    lang === code
-                      ? "bg-slate-900 text-white"
-                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-                  }`}
-                >
-                  {short}
-                </button>
+    <>
+      <style>{`
+        @keyframes fade-in-scale {
+          from { transform: scale(0.95); opacity: 0; }
+          to { transform: scale(1); opacity: 1; }
+        }
+        .animate-fade-in-scale { animation: fade-in-scale 0.2s ease-out forwards; }
+        .faq-answer {
+            transition: max-height 0.5s cubic-bezier(0.25, 0.1, 0.25, 1.0), opacity 0.3s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        .faq-answer-open {
+            max-height: 200px; /* Adjust as needed */
+            opacity: 1;
+        }
+        .faq-icon {
+            transition: transform 0.3s ease-in-out;
+        }
+        .faq-icon-open {
+            transform: rotate(45deg);
+        }
+      `}</style>
+      <div className="min-h-screen bg-white text-slate-900 flex flex-col">
+        <header className="fixed top-0 z-50 w-full border-b border-slate-200/50 bg-white/95 backdrop-blur-sm supports-[backdrop-filter]:bg-white/90">
+          <Container className="flex h-16 items-center justify-between">
+            <a href="#home" className="flex items-center">
+              <img src="https://cdn.omiseweb.com/logo02.png" alt="OmiseWeb Logo" className="h-8 w-auto" />
+            </a>
+            <nav className="hidden lg:flex items-center gap-6 text-sm font-medium">
+              {(Object.keys(t.nav) as Array<keyof typeof t.nav>).map((key) => (
+                <a key={key} href={`#${key}`} className={`px-3 py-2 rounded-lg transition-colors duration-200 ${activeSection === key ? "text-slate-900 bg-slate-100" : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"}`} onClick={() => setMenuOpen(false)}>
+                  {t.nav[key]}
+                </a>
               ))}
+            </nav>
+            <div className="hidden lg:flex items-center gap-4">
+              <div className="flex items-center gap-1">
+                {languageOptions.map(({ code, label }) => (
+                  <button key={code} onClick={() => setLang(code)} className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors duration-200 ${lang === code ? "bg-slate-900 text-white" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"}`}>
+                    {label}
+                  </button>
+                ))}
+              </div>
+              <a href="#contact" className="px-5 py-2 bg-slate-900 text-white text-sm font-medium rounded-lg hover:bg-slate-800 transition-colors duration-200 shadow-sm hover:shadow-md">
+                Get Started
+              </a>
             </div>
-
-            <a
-              href="#contact"
-              className="px-5 py-2 bg-slate-900 text-white text-sm font-medium rounded-lg hover:bg-slate-800 transition-colors duration-200 shadow-sm hover:shadow-md"
-            >
-              Get Started
-            </a>
-          </div>
-
-          <div className="flex items-center gap-2 lg:hidden">
-            <div className="relative" ref={langMenuRef}>
-              <button
-                onClick={() => setLangMenuOpen(!isLangMenuOpen)}
-                className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors duration-200"
-                aria-label="Open language menu"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.874 6.5 7.5 6.5h5c.626 0 .988-.77 1.256-1.179a6.006 6.006 0 011.912 2.706c-.227.172-.44.384-.638.618a.5.5 0 01-.854-.51c.074-.185.14-.375.196-.572a.5.5 0 00-.968-.242 4.01 4.01 0 00-3.666 0 .5.5 0 00-.968.242c.056.197.122.387.196.572a.5.5 0 01-.854.51c-.198-.234-.411-.446-.638-.618zM4 10a.5.5 0 00.5.5h11a.5.5 0 100-1H4.5a.5.5 0 00-.5.5z" clipRule="evenodd" />
-                </svg>
+            <div className="flex items-center gap-2 lg:hidden">
+              <button onClick={() => setLangPopupOpen(true)} className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors duration-200" aria-label="Choose language">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m0 0a9 9 0 019-9m-9 9a9 9 0 009 9" /></svg>
               </button>
-              {isLangMenuOpen && (
-                <div
-                  className="absolute top-full right-0 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                  role="menu"
-                  aria-orientation="vertical"
-                >
-                  <div className="py-1" role="none">
-                    {languageOptions.map(({ code, label }) => (
-                      <button
-                        key={code}
-                        onClick={() => {
-                          setLang(code);
-                          setLangMenuOpen(false);
-                        }}
-                        className={`block w-full px-4 py-2 text-left text-sm font-medium ${
-                          lang === code
-                            ? "bg-slate-100 text-slate-900"
-                            : "text-slate-700 hover:bg-slate-100 hover:text-slate-900"
-                        }`}
-                        role="menuitem"
-                      >
-                        {label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
+              <button onClick={() => setMenuOpen(!isMenuOpen)} className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors duration-200" aria-label={isMenuOpen ? "Close menu" : "Open menu"}>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">{isMenuOpen ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /> : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />}</svg>
+              </button>
             </div>
-
-            <button
-              onClick={() => setMenuOpen(!isMenuOpen)}
-              className="lg:hidden p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors duration-200"
-              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                {isMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                )}
-              </svg>
-            </button>
-          </div>
-        </Container>
-
-        <div
-          className={`lg:hidden bg-white border-t border-slate-200 transition-all duration-300 ${
-            isMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0 overflow-hidden"
-          }`}
-        >
-          <nav className="px-4 py-4 space-y-2">
-            {(Object.keys(t.nav) as Array<keyof typeof t.nav>).map((key) => (
-              <a
-                key={key}
-                href={`#${key}`}
-                className="block py-2 px-3 rounded-lg text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors duration-200 font-medium"
-                onClick={() => setMenuOpen(false)}
-              >
-                {t.nav[key]}
-              </a>
-            ))}
-            
-            <a
-              href="#contact"
-              className="block mt-4 pt-4 border-t border-slate-200 py-2 px-4 bg-slate-900 text-white text-center font-medium rounded-lg hover:bg-slate-800 transition-colors duration-200"
-              onClick={() => setMenuOpen(false)}
-            >
-              Get Started
-            </a>
-          </nav>
-        </div>
-      </header>
-
-      <section
-        id="home"
-        className="relative min-h-screen flex items-center justify-center text-white pt-16 overflow-hidden"
-      >
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute top-0 left-0 w-full h-full object-cover z-0"
-          src="https://cdn.omiseweb.com/hero04.mp4"
-          onError={(e) => {
-            e.currentTarget.style.display = "none";
-          }}
-        >
-          Your browser does not support the video tag.
-        </video>
-        <div className="absolute inset-0 bg-slate-50 z-[-1]"></div>
-
-        <div className="absolute top-0 left-0 w-full h-full bg-black/50 z-10"></div>
-
-        <Container className="relative z-20 py-20 sm:py-32">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="mb-8 inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm text-white text-sm font-medium rounded-full border border-white/20">
-              <span className="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
-              Trusted by 200+ businesses across Japan
-            </div>
-
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-8 text-white shadow-text">
-              {t.heroTitle}
-            </h1>
-
-            <p className="text-xl sm:text-2xl text-slate-200 mb-12 leading-relaxed max-w-3xl mx-auto">
-              {t.heroSubtitle}
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <a
-                href="#contact"
-                className="px-8 py-4 bg-white text-slate-900 font-semibold rounded-lg hover:bg-slate-200 transition-colors duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
-              >
-                {t.ctaPrimary}
-              </a>
-
-              <a
-                href="#pricing"
-                className="px-8 py-4 border border-white/50 text-white font-semibold rounded-lg hover:bg-white/10 backdrop-blur-sm transition-colors duration-200"
-              >
-                {t.ctaSecondary}
-              </a>
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      <FadeInSection id="services" className="py-24 bg-white">
-        <Container>
-          <div className="max-w-3xl mx-auto text-center mb-16">
-            <h2 className="text-3xl sm:text-5xl font-bold mb-6 text-slate-900">
-              {t.servicesHeading}
-            </h2>
-            <p className="text-xl text-slate-600 leading-relaxed">
-              {t.servicesSubheading}
-            </p>
-          </div>
-
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4 mb-16">
-            <div className="p-8 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors duration-200">
-              <div className="w-12 h-12 bg-slate-900 rounded-lg flex items-center justify-center mb-6">
-                <svg
-                  className="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold text-slate-900 mb-4">
-                {t.servicesItems.creation.title}
-              </h3>
-              <ul className="space-y-2 text-slate-600">
-                {t.servicesItems.creation.list.map((item: string, idx: number) => (
-                  <li key={idx} className="flex items-start gap-2">
-                    <span className="w-1.5 h-1.5 bg-slate-400 rounded-full mt-2 flex-shrink-0"></span>
-                    <span className="text-sm">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="p-8 bg-slate-900 text-white rounded-xl">
-              <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mb-6">
-                <svg
-                  className="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold mb-4">
-                {t.servicesItems.management.title}
-              </h3>
-              <p className="text-white/80 text-sm mb-4">Most Popular</p>
-              <ul className="space-y-2 text-white/90">
-                {t.servicesItems.management.list.map((item: string, idx: number) => (
-                  <li key={idx} className="flex items-start gap-2">
-                    <span className="w-1.5 h-1.5 bg-white/60 rounded-full mt-2 flex-shrink-0"></span>
-                    <span className="text-sm">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="p-8 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors duration-200">
-              <div className="w-12 h-12 bg-slate-900 rounded-lg flex items-center justify-center mb-6">
-                <svg
-                  className="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold text-slate-900 mb-4">
-                {t.servicesItems.marketing.title}
-              </h3>
-              <div className="inline-block px-3 py-1 bg-slate-200 text-slate-700 text-xs font-medium rounded-full mb-4">
-                {t.servicesItems.marketing.comingSoon}
-              </div>
-              <p className="text-slate-600 text-sm">
-                {t.servicesItems.marketing.description}
-              </p>
-            </div>
-
-            <div className="p-8 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors duration-200">
-              <div className="w-12 h-12 bg-slate-900 rounded-lg flex items-center justify-center mb-6">
-                <svg
-                  className="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold text-slate-900 mb-4">
-                {t.servicesItems.recruitment.title}
-              </h3>
-              <div className="inline-block px-3 py-1 bg-slate-200 text-slate-700 text-xs font-medium rounded-full mb-4">
-                {t.servicesItems.recruitment.comingSoon}
-              </div>
-              <p className="text-slate-600 text-sm">
-                {t.servicesItems.recruitment.description}
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-slate-50 rounded-2xl p-8 lg:p-12">
-            <img
-              src="https://placehold.co/1200x600/e2e8f0/475569?text=Responsive+Design+Showcase"
-              alt="Website design showcase"
-              className="rounded-xl shadow-lg w-full"
-            />
-          </div>
-        </Container>
-      </FadeInSection>
-
-      {/* Pricing Section */}
-      <FadeInSection id="pricing" className="py-24 bg-slate-50">
-        {/* ... content for pricing ... */}
-      </FadeInSection>
-
-      {/* How it Works Section */}
-      <FadeInSection id="how" className="py-24 bg-white">
-        {/* ... content for how it works ... */}
-      </FadeInSection>
-
-      {/* Works/Portfolio Section */}
-      <FadeInSection id="works" className="py-24 bg-slate-900 text-white">
-        {/* ... content for works/portfolio ... */}
-      </FadeInSection>
-      
-      {/* FAQ Section */}
-      <FadeInSection id="faq" className="py-24 bg-white">
-        {/* ... content for faq ... */}
-      </FadeInSection>
-
-      {/* Contact Section */}
-      <FadeInSection id="contact" className="py-24 bg-slate-50">
-        {/* ... content for contact ... */}
-      </FadeInSection>
-
-      {/* Footer */}
-      <footer className="bg-slate-900 text-white py-12">
-          <Container className="text-center text-slate-400">
-              <p>&copy; {new Date().getFullYear()} OmiseWeb. All rights reserved.</p>
           </Container>
-      </footer>
+          <div className={`lg:hidden bg-white border-t border-slate-200 transition-all duration-300 ${isMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0 overflow-hidden"}`}>
+            <nav className="px-4 py-4">
+              <div className="space-y-2">
+                {(Object.keys(t.nav) as Array<keyof typeof t.nav>).map((key) => (
+                  <a key={key} href={`#${key}`} className="block py-2 px-3 rounded-lg text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors duration-200 font-medium" onClick={() => setMenuOpen(false)}>
+                    {t.nav[key]}
+                  </a>
+                ))}
+              </div>
+              <div className="mt-4 pt-4 border-t border-slate-200">
+                <a href="#contact" className="block w-full py-2 px-4 bg-slate-900 text-white text-center font-medium rounded-lg hover:bg-slate-800 transition-colors duration-200" onClick={() => setMenuOpen(false)}>
+                  Get Started
+                </a>
+              </div>
+            </nav>
+          </div>
+        </header>
 
-      <ScrollTopButton show={showScrollTop} onClick={scrollToTop} />
-    </div>
+        {isLangPopupOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={() => setLangPopupOpen(false)}>
+            <div onClick={(e) => e.stopPropagation()} className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-xs mx-4 transform animate-fade-in-scale">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-bold text-slate-800">{lang === 'en' ? 'Choose Language' : lang === 'th' ? 'เลือกภาษา' : '选择语言'}</h3>
+                <button onClick={() => setLangPopupOpen(false)} className="p-1 rounded-full text-slate-500 hover:bg-slate-100" aria-label="Close language selection">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              </div>
+              <div className="flex flex-col gap-3">
+                {languageOptions.map(({ code, fullName }) => (
+                  <button key={code} onClick={() => { setLang(code); setLangPopupOpen(false); }} className={`w-full py-3 px-4 rounded-lg text-md font-medium text-left transition-colors duration-200 flex items-center justify-between ${lang === code ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200"}`}>
+                    <span>{fullName}</span>
+                    {lang === code && <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        <main>
+          <section id="home" className="relative min-h-screen flex items-center justify-center text-white pt-16 overflow-hidden">
+            <video autoPlay loop muted playsInline className="absolute top-0 left-0 w-full h-full object-cover z-0" src="https://cdn.omiseweb.com/hero04.mp4" onError={(e) => { e.currentTarget.style.display = "none"; }}>
+              Your browser does not support the video tag.
+            </video>
+            <div className="absolute inset-0 bg-slate-50 z-[-1]"></div>
+            <div className="absolute top-0 left-0 w-full h-full bg-black/50 z-10"></div>
+            <Container className="relative z-20 py-20 sm:py-32">
+              <div className="max-w-4xl mx-auto text-center">
+                <div className="mb-8 inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm text-white text-sm font-medium rounded-full border border-white/20">
+                  <span className="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
+                  Trusted by 200+ businesses across Japan
+                </div>
+                <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-8 text-white shadow-text">{t.heroTitle}</h1>
+                <p className="text-xl sm:text-2xl text-slate-200 mb-12 leading-relaxed max-w-3xl mx-auto">{t.heroSubtitle}</p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                  <a href="#contact" className="px-8 py-4 bg-white text-slate-900 font-semibold rounded-lg hover:bg-slate-200 transition-colors duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">{t.ctaPrimary}</a>
+                  <a href="#pricing" className="px-8 py-4 border border-white/50 text-white font-semibold rounded-lg hover:bg-white/10 backdrop-blur-sm transition-colors duration-200">{t.ctaSecondary}</a>
+                </div>
+              </div>
+            </Container>
+          </section>
+
+          <FadeInSection id="services" className="py-24 bg-white">
+            <Container>
+              <div className="max-w-3xl mx-auto text-center mb-16">
+                <h2 className="text-3xl sm:text-5xl font-bold mb-6 text-slate-900">{t.servicesHeading}</h2>
+                <p className="text-xl text-slate-600 leading-relaxed">{t.servicesSubheading}</p>
+              </div>
+              <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+                <div className="p-8 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors duration-200">
+                  <div className="w-12 h-12 bg-slate-900 rounded-lg flex items-center justify-center mb-6"><svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg></div>
+                  <h3 className="text-xl font-semibold text-slate-900 mb-4">{t.servicesItems.creation.title}</h3>
+                  <ul className="space-y-2 text-slate-600">{t.servicesItems.creation.list.map((item, idx) => (<li key={idx} className="flex items-start gap-2"><span className="w-1.5 h-1.5 bg-slate-400 rounded-full mt-2 flex-shrink-0"></span><span className="text-sm">{item}</span></li>))}</ul>
+                </div>
+                <div className="p-8 bg-slate-900 text-white rounded-xl">
+                  <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mb-6"><svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg></div>
+                  <h3 className="text-xl font-semibold mb-4">{t.servicesItems.management.title}</h3><p className="text-white/80 text-sm mb-4">Most Popular</p>
+                  <ul className="space-y-2 text-white/90">{t.servicesItems.management.list.map((item, idx) => (<li key={idx} className="flex items-start gap-2"><span className="w-1.5 h-1.5 bg-white/60 rounded-full mt-2 flex-shrink-0"></span><span className="text-sm">{item}</span></li>))}</ul>
+                </div>
+                <div className="p-8 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors duration-200">
+                  <div className="w-12 h-12 bg-slate-900 rounded-lg flex items-center justify-center mb-6"><svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg></div>
+                  <h3 className="text-xl font-semibold text-slate-900 mb-4">{t.servicesItems.marketing.title}</h3><div className="inline-block px-3 py-1 bg-slate-200 text-slate-700 text-xs font-medium rounded-full mb-4">{t.servicesItems.marketing.comingSoon}</div><p className="text-slate-600 text-sm">{t.servicesItems.marketing.description}</p>
+                </div>
+                <div className="p-8 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors duration-200">
+                  <div className="w-12 h-12 bg-slate-900 rounded-lg flex items-center justify-center mb-6"><svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg></div>
+                  <h3 className="text-xl font-semibold text-slate-900 mb-4">{t.servicesItems.recruitment.title}</h3><div className="inline-block px-3 py-1 bg-slate-200 text-slate-700 text-xs font-medium rounded-full mb-4">{t.servicesItems.recruitment.comingSoon}</div><p className="text-slate-600 text-sm">{t.servicesItems.recruitment.description}</p>
+                </div>
+              </div>
+            </Container>
+          </FadeInSection>
+
+          <FadeInSection id="pricing" className="py-24 bg-slate-50">
+            <Container>
+                <div className="max-w-3xl mx-auto text-center mb-16">
+                    <h2 className="text-3xl sm:text-5xl font-bold mb-6 text-slate-900">{t.pricingHeading}</h2>
+                </div>
+                <div className="grid lg:grid-cols-3 gap-8 items-center">
+                    {t.pricingPlans.map((plan, idx) => (
+                        <div key={idx} className={`p-8 rounded-2xl transition-all duration-300 ${plan.highlight ? 'bg-slate-900 text-white shadow-2xl scale-105' : 'bg-white shadow-lg'}`}>
+                            <h3 className="text-2xl font-bold mb-4">{plan.name}</h3>
+                            <p className={`${plan.highlight ? 'text-slate-300' : 'text-slate-600'} mb-6`}>{plan.description}</p>
+                            <div className="mb-8">
+                                <span className="text-5xl font-extrabold">{plan.price}</span>
+                                <span className={`${plan.highlight ? 'text-slate-400' : 'text-slate-500'} ml-2`}>{plan.monthly}</span>
+                            </div>
+                            <ul className="space-y-4 mb-8">
+                                {plan.features.map((feature, fIdx) => (
+                                    <li key={fIdx} className="flex items-center gap-3">
+                                        <svg className={`w-6 h-6 flex-shrink-0 ${plan.highlight ? 'text-green-400' : 'text-slate-900'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                                        <span>{feature}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                            <a href="#contact" className={`block w-full text-center py-3 px-6 rounded-lg font-semibold transition-colors duration-200 ${plan.highlight ? 'bg-white text-slate-900 hover:bg-slate-200' : 'bg-slate-900 text-white hover:bg-slate-800'}`}>
+                                Choose Plan
+                            </a>
+                        </div>
+                    ))}
+                </div>
+            </Container>
+          </FadeInSection>
+          
+          <FadeInSection id="how" className="py-24 bg-white">
+            <Container>
+              <div className="max-w-3xl mx-auto text-center mb-16">
+                <h2 className="text-3xl sm:text-5xl font-bold mb-6 text-slate-900">{t.howHeading}</h2>
+              </div>
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {t.howSteps.map((step, idx) => (
+                  <div key={idx} className="text-center p-6">
+                    <div className="text-6xl mb-4">{step.icon}</div>
+                    <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
+                    <p className="text-slate-600">{step.description}</p>
+                  </div>
+                ))}
+              </div>
+            </Container>
+          </FadeInSection>
+          
+          <FadeInSection id="works" className="py-24 bg-slate-50">
+            <Container>
+                <div className="max-w-3xl mx-auto text-center mb-16">
+                    <h2 className="text-3xl sm:text-5xl font-bold mb-6 text-slate-900">{t.worksHeading}</h2>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-16">
+                    {portfolioImages.map((src, idx) => (
+                        <div key={idx} className="overflow-hidden rounded-lg shadow-lg">
+                            <img src={src} alt={`Portfolio item ${idx + 1}`} className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-300" />
+                        </div>
+                    ))}
+                </div>
+                <div className="space-y-8">
+                    {t.worksTestimonials.map((testimonial, idx) => (
+                        <blockquote key={idx} className="bg-white p-8 rounded-lg shadow-md max-w-2xl mx-auto">
+                            <p className="text-lg text-slate-700 mb-4">"{testimonial.text}"</p>
+                            <footer className="text-right">
+                                <p className="font-semibold text-slate-900">{testimonial.author}</p>
+                                <p className="text-sm text-slate-500">{testimonial.role}</p>
+                            </footer>
+                        </blockquote>
+                    ))}
+                </div>
+            </Container>
+          </FadeInSection>
+
+          <FadeInSection id="faq" className="py-24 bg-white">
+            <Container>
+                <div className="max-w-3xl mx-auto text-center mb-16">
+                    <h2 className="text-3xl sm:text-5xl font-bold mb-6 text-slate-900">{t.faqHeading}</h2>
+                </div>
+                <div className="max-w-3xl mx-auto space-y-4">
+                    {t.faqs.map((faq, idx) => (
+                        <div key={idx} className="border border-slate-200 rounded-lg overflow-hidden">
+                            <button onClick={() => setOpenFaq(openFaq === idx ? null : idx)} className="w-full flex justify-between items-center p-5 text-left font-semibold">
+                                <span>{faq.question}</span>
+                                <svg className={`w-5 h-5 text-slate-500 faq-icon ${openFaq === idx ? 'faq-icon-open' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+                            </button>
+                            <div className={`px-5 pb-5 text-slate-600 faq-answer ${openFaq === idx ? 'faq-answer-open' : ''}`}>
+                                <p>{faq.answer}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </Container>
+          </FadeInSection>
+
+          <FadeInSection id="contact" className="py-24 bg-slate-900 text-white">
+            <Container>
+                <div className="max-w-3xl mx-auto text-center mb-16">
+                    <h2 className="text-3xl sm:text-5xl font-bold mb-6">{t.contactHeading}</h2>
+                    <p className="text-xl text-slate-300 leading-relaxed">{t.contactSubheading}</p>
+                </div>
+                <form className="max-w-xl mx-auto space-y-6">
+                    <div className="grid sm:grid-cols-2 gap-6">
+                        <input type="text" placeholder={t.contactPlaceholders.name} className="w-full p-4 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
+                        <input type="email" placeholder={t.contactPlaceholders.email} className="w-full p-4 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
+                    </div>
+                    <input type="text" placeholder={t.contactPlaceholders.business} className="w-full p-4 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
+                    <textarea placeholder={t.contactPlaceholders.message} rows={5} className="w-full p-4 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"></textarea>
+                    <button type="submit" className="w-full py-4 px-8 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-lg hover:shadow-red-500/50 transform hover:scale-105">
+                        {t.contactButton}
+                    </button>
+                </form>
+            </Container>
+          </FadeInSection>
+        </main>
+        
+        <footer className="bg-slate-900 text-slate-400 py-8">
+            <Container className="text-center text-sm">
+                <p>&copy; {new Date().getFullYear()} OmiseWeb. All rights reserved.</p>
+            </Container>
+        </footer>
+
+        <ScrollTopButton show={showScrollTop} onClick={scrollToTop} />
+      </div>
+    </>
   );
 }
+
