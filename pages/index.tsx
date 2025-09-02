@@ -89,11 +89,473 @@ const ScrollTopButton: React.FC<{
 // Supported languages
 type Lang = "en" | "th" | "zh";
 
-// Text content object (messages) remains the same as provided initially...
-const messages: Record<Lang, any> = {
-    en: { nav: { home: "Home", services: "Services", pricing: "Pricing", works: "Portfolio", how: "Process", faq: "FAQ", contact: "Contact",}, heroTitle: "Launch Your Restaurant or Salon Website in Japan", heroSubtitle: "Professional website creation and management for international businesses. From concept to launch in just 2 weeks.", ctaPrimary: "Start Your Project", ctaSecondary: "View Pricing", servicesHeading: "Complete Web Solutions", servicesSubheading: "Everything you need to establish a strong digital presence in Japan's competitive market.", servicesItems: { creation: { title: "Website Creation", list: ["Custom responsive design", "Multilingual support (EN/TH/CH/JP)", "Online reservation system", "SEO optimization",], }, management: { title: "Ongoing Management", list: ["Content updates & maintenance", "Social media integration", "Security monitoring", "Performance optimization",], }, marketing: { title: "Digital Marketing", comingSoon: "Coming Q2 2025", description: "SEO, social media, and local advertising", }, recruitment: { title: "Staff Recruitment", comingSoon: "Coming Q3 2025", description: "Bilingual staff hiring support", }, }, pricingHeading: "Simple, Transparent Pricing", pricingPlans: [{ name: "Ume", price: "¥50,000", monthly: "¥0/month", description: "Perfect for small cafes", features: ["5-page website", "Basic SEO", "1 language"], }, { name: "Take", price: "¥100,000", monthly: "¥10,000/month", description: "Most popular choice", features: ["10-page website", "Booking system", "3 languages", "Monthly updates",], highlight: true, }, { name: "Matsu", price: "¥200,000", monthly: "¥30,000/month", description: "Premium solution", features: ["Unlimited pages", "Advanced features", "Priority support", "Weekly updates",], },], howHeading: "Our Proven Process", howSteps: [{ title: "Discovery Call", description: "Free consultation to understand your vision", icon: "💬", }, { title: "Design & Plan", description: "Custom design mockups and project timeline", icon: "🎨", }, { title: "Development", description: "Professional development in 1-2 weeks", icon: "⚡", }, { title: "Launch & Support", description: "Go live with ongoing maintenance", icon: "🚀", },], worksHeading: "Success Stories", worksTestimonials: [{ text: "OmiseWeb transformed our business. International customers now find us easily and bookings increased 300%.", author: "Tanaka-san", role: "Restaurant Owner, Shibuya", }, { text: "The multilingual website helped us serve Thai and Chinese customers better. Professional service from start to finish.", author: "Yuki", role: "Salon Owner, Harajuku", },], faqHeading: "Frequently Asked Questions", faqs: [{ question: "Do you provide English support?", answer: "Yes, our team provides full English support throughout the project and ongoing maintenance.", }, { question: "How long does it take to build a website?", answer: "Most websites are completed within 1-2 weeks, depending on complexity and content preparation.", }, { question: "What payment methods do you accept?", answer: "We accept credit cards, bank transfers, and PayPal for international clients.", }, { question: "Can you help with Japanese regulations?", answer: "Yes, we ensure your website complies with Japanese web standards and accessibility requirements.", },], contactHeading: "Start Your Project Today", contactSubheading: "Get a free consultation and quote within 24 hours", contactPlaceholders: { name: "Your Name", email: "Email Address", business: "Business Type", message: "Tell us about your project...", }, contactButton: "Send Message", }, th: { nav: { home: "หน้าแรก", services: "บริการ", pricing: "ราคา", works: "ผลงาน", how: "ขั้นตอน", faq: "คำถามที่พบบ่อย", contact: "ติดต่อ", }, heroTitle: "เว็บไซต์ร้านอาหารและซาลอนในญี่ปุ่น", heroSubtitle: "สร้างและจัดการเว็บไซต์มืออาชีพสำหรับธุรกิจนานาชาติ เสร็จภายใน 2 สัปดาห์", ctaPrimary: "เริ่มโปรเจค", ctaSecondary: "ดูราคา", servicesHeading: "โซลูชันเว็บครบวงจร", servicesSubheading: "ทุกสิ่งที่คุณต้องการเพื่อสร้างตัวตนทางดิจิทัลในตลาดญี่ปุ่น", }, zh: { nav: { home: "首页", services: "服务", pricing: "价格", works: "案例", how: "流程", faq: "常见问题", contact: "联系我们", }, heroTitle: "在日本创建餐厅和美发沙龍网站", heroSubtitle: "为国际企业提供专业的网站创建和管理服务。从概念到上线仅需2周。", ctaPrimary: "开始项目", ctaSecondary: "查看价格", servicesHeading: "完整的网络解决方案", servicesSubheading: "在日本竞争激烈的市场中建立强大数字化形象所需的一切。", },
+// Enhanced translations with better copy
+const messages: Record<
+  Lang,
+  {
+    nav: Record<string, string>;
+    heroTitle: string;
+    heroSubtitle: string;
+    ctaPrimary: string;
+    ctaSecondary: string;
+    servicesHeading: string;
+    servicesSubheading: string;
+    servicesItems: {
+      creation: { title: string; list: string[] };
+      management: { title: string; list: string[] };
+      marketing: { title: string; comingSoon: string; description: string };
+      recruitment: { title: string; comingSoon: string; description: string };
+    };
+    pricingHeading: string;
+    pricingPlans: Array<{
+      name: string;
+      price: string;
+      monthly: string;
+      description: string;
+      features: string[];
+      highlight?: boolean;
+    }>;
+    howHeading: string;
+    howSteps: Array<{ title: string; description: string; icon: string }>;
+    worksHeading: string;
+    worksTestimonials: Array<{ text: string; author: string; role: string }>;
+    faqHeading: string;
+    faqs: Array<{ question: string; answer: string }>;
+    contactHeading: string;
+    contactSubheading: string;
+    contactPlaceholders: {
+      name: string;
+      email: string;
+      business: string;
+      message: string;
+    };
+    contactButton: string;
+  }
+> = {
+  en: {
+    nav: {
+      home: "Home",
+      services: "Services",
+      pricing: "Pricing",
+      works: "Portfolio",
+      how: "Process",
+      faq: "FAQ",
+      contact: "Contact",
+    },
+    heroTitle: "Launch Your Restaurant or Salon Website in Japan",
+    heroSubtitle:
+      "Professional website creation and management for international businesses. From concept to launch in just 2 weeks.",
+    ctaPrimary: "Start Your Project",
+    ctaSecondary: "View Pricing",
+    servicesHeading: "Complete Web Solutions",
+    servicesSubheading:
+      "Everything you need to establish a strong digital presence in Japan's competitive market.",
+    servicesItems: {
+      creation: {
+        title: "Website Creation",
+        list: [
+          "Custom responsive design",
+          "Multilingual support (EN/TH/CH/JP)",
+          "Online reservation system",
+          "SEO optimization",
+        ],
+      },
+      management: {
+        title: "Ongoing Management",
+        list: [
+          "Content updates & maintenance",
+          "Social media integration",
+          "Security monitoring",
+          "Performance optimization",
+        ],
+      },
+      marketing: {
+        title: "Digital Marketing",
+        comingSoon: "Coming Q2 2025",
+        description: "SEO, social media, and local advertising",
+      },
+      recruitment: {
+        title: "Staff Recruitment",
+        comingSoon: "Coming Q3 2025",
+        description: "Bilingual staff hiring support",
+      },
+    },
+    pricingHeading: "Simple, Transparent Pricing",
+    pricingPlans: [
+      {
+        name: "Ume",
+        price: "¥50,000",
+        monthly: "¥0/month",
+        description: "Perfect for small cafes",
+        features: ["5-page website", "Basic SEO", "1 language"],
+      },
+      {
+        name: "Take",
+        price: "¥100,000",
+        monthly: "¥10,000/month",
+        description: "Most popular choice",
+        features: [
+          "10-page website",
+          "Booking system",
+          "3 languages",
+          "Monthly updates",
+        ],
+        highlight: true,
+      },
+      {
+        name: "Matsu",
+        price: "¥200,000",
+        monthly: "¥30,000/month",
+        description: "Premium solution",
+        features: [
+          "Unlimited pages",
+          "Advanced features",
+          "Priority support",
+          "Weekly updates",
+        ],
+      },
+    ],
+    howHeading: "Our Proven Process",
+    howSteps: [
+      {
+        title: "Discovery Call",
+        description: "Free consultation to understand your vision",
+        icon: "💬",
+      },
+      {
+        title: "Design & Plan",
+        description: "Custom design mockups and project timeline",
+        icon: "🎨",
+      },
+      {
+        title: "Development",
+        description: "Professional development in 1-2 weeks",
+        icon: "⚡",
+      },
+      {
+        title: "Launch & Support",
+        description: "Go live with ongoing maintenance",
+        icon: "🚀",
+      },
+    ],
+    worksHeading: "Success Stories",
+    worksTestimonials: [
+      {
+        text: "OmiseWeb transformed our business. International customers now find us easily and bookings increased 300%.",
+        author: "Tanaka-san",
+        role: "Restaurant Owner, Shibuya",
+      },
+      {
+        text: "The multilingual website helped us serve Thai and Chinese customers better. Professional service from start to finish.",
+        author: "Yuki",
+        role: "Salon Owner, Harajuku",
+      },
+    ],
+    faqHeading: "Frequently Asked Questions",
+    faqs: [
+      {
+        question: "Do you provide English support?",
+        answer:
+          "Yes, our team provides full English support throughout the project and ongoing maintenance.",
+      },
+      {
+        question: "How long does it take to build a website?",
+        answer:
+          "Most websites are completed within 1-2 weeks, depending on complexity and content preparation.",
+      },
+      {
+        question: "What payment methods do you accept?",
+        answer:
+          "We accept credit cards, bank transfers, and PayPal for international clients.",
+      },
+      {
+        question: "Can you help with Japanese regulations?",
+        answer:
+          "Yes, we ensure your website complies with Japanese web standards and accessibility requirements.",
+      },
+    ],
+    contactHeading: "Start Your Project Today",
+    contactSubheading: "Get a free consultation and quote within 24 hours",
+    contactPlaceholders: {
+      name: "Your Name",
+      email: "Email Address",
+      business: "Business Type",
+      message: "Tell us about your project...",
+    },
+    contactButton: "Send Message",
+  },
+  th: {
+    nav: {
+      home: "หน้าแรก",
+      services: "บริการ",
+      pricing: "ราคา",
+      works: "ผลงาน",
+      how: "ขั้นตอน",
+      faq: "คำถามที่พบบ่อย",
+      contact: "ติดต่อ",
+    },
+    heroTitle: "เว็บไซต์ร้านอาหารและซาลอนในญี่ปุ่น",
+    heroSubtitle:
+      "สร้างและจัดการเว็บไซต์มืออาชีพสำหรับธุรกิจนานาชาติ เสร็จภายใน 2 สัปดาห์",
+    ctaPrimary: "เริ่มโปรเจค",
+    ctaSecondary: "ดูราคา",
+    servicesHeading: "โซลูชันเว็บครบวงจร",
+    servicesSubheading:
+      "ทุกสิ่งที่คุณต้องการเพื่อสร้างตัวตนทางดิจิทัลในตลาดญี่ปุ่น",
+    servicesItems: {
+      creation: {
+        title: "สร้างเว็บไซต์",
+        list: [
+          "ออกแบบตอบสนองแบบกำหนดเอง",
+          "รองรับหลายภาษา (EN/TH/CH/JP)",
+          "ระบบจองออนไลน์",
+          "การปรับ SEO",
+        ],
+      },
+      management: {
+        title: "การจัดการอย่างต่อเนื่อง",
+        list: [
+          "อัปเดตเนื้อหาและบำรุงรักษา",
+          "การรวมโซเชียลมีเดีย",
+          "ตรวจสอบความปลอดภัย",
+          "เพิ่มประสิทธิภาพ",
+        ],
+      },
+      marketing: {
+        title: "การตลาดดิจิทัล",
+        comingSoon: "เร็ว ๆ นี้ Q2 2025",
+        description: "SEO, โซเชียลมีเดีย และโฆษณาท้องถิ่น",
+      },
+      recruitment: {
+        title: "การสรรหาพนักงาน",
+        comingSoon: "เร็ว ๆ นี้ Q3 2025",
+        description: "การสนับสนุนการจ้างงานแบบสองภาษา",
+      },
+    },
+    pricingHeading: "ราคาง่าย โปร่งใส",
+    pricingPlans: [
+      {
+        name: "Ume",
+        price: "¥50,000",
+        monthly: "¥0/เดือน",
+        description: "เหมาะสำหรับร้านเล็ก",
+        features: ["เว็บไซต์ 5 หน้า", "SEO พื้นฐาน", "1 ภาษา"],
+      },
+      {
+        name: "Take",
+        price: "¥100,000",
+        monthly: "¥10,000/เดือน",
+        description: "ตัวเลือกยอดนิยม",
+        features: ["เว็บไซต์ 10 หน้า", "ระบบจอง", "3 ภาษา", "อัปเดตรายเดือน"],
+        highlight: true,
+      },
+      {
+        name: "Matsu",
+        price: "¥200,000",
+        monthly: "¥30,000/เดือน",
+        description: "โซลูชันพรีเมียม",
+        features: [
+          "หน้าไม่จำกัด",
+          "คุณสมบัติขั้นสูง",
+          "การสนับสนุนเป็นพิเศษ",
+          "อัปเดตรายสัปดาห์",
+        ],
+      },
+    ],
+    howHeading: "กระบวนการที่พิสูจน์แล้ว",
+    howSteps: [
+      {
+        title: "โทรสำรวจ",
+        description: "ปรึกษาฟรีเพื่อเข้าใจวิสัยทัศน์ของคุณ",
+        icon: "💬",
+      },
+      {
+        title: "ออกแบบและวางแผน",
+        description: "แม็อคอัปการออกแบบที่กำหนดเองและไทม์ไลน์โปรเจค",
+        icon: "🎨",
+      },
+      {
+        title: "พัฒนา",
+        description: "การพัฒนาอย่างมืออาชีพใน 1-2 สัปดาห์",
+        icon: "⚡",
+      },
+      {
+        title: "เปิดตัวและสนับสนุน",
+        description: "ไปสดพร้อมการบำรุงรักษาอย่างต่อเนื่อง",
+        icon: "🚀",
+      },
+    ],
+    worksHeading: "เรื่องราวความสำเร็จ",
+    worksTestimonials: [
+      {
+        text: "OmiseWeb เปลี่ยนธุรกิจของเรา ลูกค้าต่างชาติค้นหาเราได้ง่ายและการจองเพิ่มขึ้น 300%",
+        author: "ทานากะ-ซัง",
+        role: "เจ้าของร้านอาหาร, ชิบุยะ",
+      },
+      {
+        text: "เว็บไซต์หลายภาษาช่วยให้เราให้บริการลูกค้าไทยและจีนได้ดีขึ้น บริการมืออาชีพตั้งแต่เริ่มต้นจนจบ",
+        author: "ยูกิ",
+        role: "เจ้าของซาลอน, ฮาราจูกุ",
+      },
+    ],
+    faqHeading: "คำถามที่พบบ่อย",
+    faqs: [
+      {
+        question: "คุณให้การสนับสนุนภาษาอังกฤษหรือไม่?",
+        answer:
+          "ใช่ ทีมของเราให้การสนับสนุนภาษาอังกฤษเต็มรูปแบบตลอดโปรเจคและการบำรุงรักษาอย่างต่อเนื่อง",
+      },
+      {
+        question: "ใช้เวลานานแค่ไหนในการสร้างเว็บไซต์?",
+        answer:
+          "เว็บไซต์ส่วนใหญ่เสร็จสิ้นภายใน 1-2 สัปดาห์ ขึ้นอยู่กับความซับซ้อนและการเตรียมเนื้อหา",
+      },
+      {
+        question: "คุณรับวิธีการชำระเงินอะไรบ้าง?",
+        answer:
+          "เรารับบัตรเครดิต การโอนเงินผ่านธนาคาร และ PayPal สำหรับลูกค้าต่างประเทศ",
+      },
+      {
+        question: "คุณสามารถช่วยเกี่ยวกับกฎระเบียบญี่ปุ่นได้หรือไม่?",
+        answer:
+          "ใช่ เราทำให้มั่นใจว่าเว็บไซต์ของคุณสอดคล้องกับมาตรฐานเว็บและความต้องการการเข้าถึงของญี่ปุ่น",
+      },
+    ],
+    contactHeading: "เริ่มโปรเจคของคุณวันนี้",
+    contactSubheading: "รับการปรึกษาฟรีและใบเสนอราคาภายใน 24 ชั่วโมง",
+    contactPlaceholders: {
+      name: "ชื่อของคุณ",
+      email: "ที่อยู่อีเมล",
+      business: "ประเภทธุรกิจ",
+      message: "บอกเราเกี่ยวกับโปรเจคของคุณ...",
+    },
+    contactButton: "ส่งข้อความ",
+  },
+  zh: {
+    nav: {
+      home: "首页",
+      services: "服务",
+      pricing: "价格",
+      works: "案例",
+      how: "流程",
+      faq: "常见问题",
+      contact: "联系我们",
+    },
+    heroTitle: "在日本创建餐厅和美发沙龙网站",
+    heroSubtitle: "为国际企业提供专业的网站创建和管理服务。从概念到上线仅需2周。",
+    ctaPrimary: "开始项目",
+    ctaSecondary: "查看价格",
+    servicesHeading: "完整的网络解决方案",
+    servicesSubheading: "在日本竞争激烈的市场中建立强大数字化形象所需的一切。",
+    servicesItems: {
+      creation: {
+        title: "网站创建",
+        list: [
+          "定制响应式设计",
+          "多语言支持 (EN/TH/CH/JP)",
+          "在线预订系统",
+          "SEO优化",
+        ],
+      },
+      management: {
+        title: "持续管理",
+        list: [
+          "内容更新和维护",
+          "社交媒体整合",
+          "安全监控",
+          "性能优化",
+        ],
+      },
+      marketing: {
+        title: "数字营销",
+        comingSoon: "2025年第二季度推出",
+        description: "SEO、社交媒体和本地广告",
+      },
+      recruitment: {
+        title: "员工招聘",
+        comingSoon: "2025年第三季度推出",
+        description: "双语员工招聘支持",
+      },
+    },
+    pricingHeading: "简单透明的定价",
+    pricingPlans: [
+      {
+        name: "Ume",
+        price: "¥50,000",
+        monthly: "¥0/月",
+        description: "适合小型咖啡厅",
+        features: ["5页网站", "基础SEO", "1种语言"],
+      },
+      {
+        name: "Take",
+        price: "¥100,000",
+        monthly: "¥10,000/月",
+        description: "最受欢迎选择",
+        features: ["10页网站", "预订系统", "3种语言", "月度更新"],
+        highlight: true,
+      },
+      {
+        name: "Matsu",
+        price: "¥200,000",
+        monthly: "¥30,000/月",
+        description: "高级解决方案",
+        features: ["无限页面", "高级功能", "优先支持", "每周更新"],
+      },
+    ],
+    howHeading: "我们经过验证的流程",
+    howSteps: [
+      {
+        title: "发现电话",
+        description: "免费咨询了解您的愿景",
+        icon: "💬",
+      },
+      { title: "设计与规划", description: "定制设计模型和项目时间表", icon: "🎨" },
+      { title: "开发", description: "1-2周专业开发", icon: "⚡" },
+      { title: "上线与支持", description: "上线并持续维护", icon: "🚀" },
+    ],
+    worksHeading: "成功案例",
+    worksTestimonials: [
+      {
+        text: "OmiseWeb改变了我们的业务。国际客户现在很容易找到我们，预订量增加了300%。",
+        author: "田中先生",
+        role: "餐厅老板，涩谷",
+      },
+      {
+        text: "多语言网站帮助我们更好地为泰语和中文客户服务。从开始到结束的专业服务。",
+        author: "雪",
+        role: "沙龙老板，原宿",
+      },
+    ],
+    faqHeading: "常见问题",
+    faqs: [
+      {
+        question: "您提供英文支持吗？",
+        answer: "是的，我们的团队在整个项目和持续维护过程中提供全面的英文支持。",
+      },
+      {
+        question: "建设网站需要多长时间？",
+        answer: "大多数网站在1-2周内完成，取决于复杂性和内容准备情况。",
+      },
+      {
+        question: "您接受什么付款方式？",
+        answer: "我们接受信用卡、银行转账和PayPal（面向国际客户）。",
+      },
+      {
+        question: "您能帮助处理日本法规吗？",
+        answer: "是的，我们确保您的网站符合日本网络标准和无障碍要求。",
+      },
+    ],
+    contactHeading: "立即开始您的项目",
+    contactSubheading: "24小时内获得免费咨询和报价",
+    contactPlaceholders: {
+      name: "您的姓名",
+      email: "电子邮件地址",
+      business: "业务类型",
+      message: "告诉我们您的项目...",
+    },
+    contactButton: "发送消息",
+  },
 };
-
 
 /**
  * The main Home component with professional design upgrades including video and images.
@@ -104,10 +566,8 @@ export default function Home() {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   
-  // ▼▼▼ ここから言語切り替えポップアップ用の state と ref を追加 ▼▼▼
   const [isLangMenuOpen, setLangMenuOpen] = useState(false);
   const langMenuRef = useRef<HTMLDivElement>(null);
-  // ▲▲▲ ここまで言語切り替えポップアップ用の state と ref を追加 ▲▲▲
 
   const t = messages[lang];
 
@@ -117,7 +577,6 @@ export default function Home() {
     { code: "zh", label: "中文", short: "CH" },
   ];
 
-  // ▼▼▼ ポップアップの外側をクリックした時にメニューを閉じるための useEffect ▼▼▼
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (langMenuRef.current && !langMenuRef.current.contains(event.target as Node)) {
@@ -129,7 +588,6 @@ export default function Home() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [langMenuRef]);
-  // ▲▲▲ ポップアップの外側をクリックした時にメニューを閉じるための useEffect ▲▲▲
 
   useEffect(() => {
     const handleScroll = () => {
@@ -169,10 +627,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white text-slate-900 flex flex-col">
-      {/* ▼▼▼ ヘッダー全体を修正 ▼▼▼ */}
       <header className="fixed top-0 z-50 w-full border-b border-slate-200/50 bg-white/95 backdrop-blur-sm supports-[backdrop-filter]:bg-white/90">
         <Container className="flex h-16 items-center justify-between">
-          {/* Logo */}
           <a href="#home" className="flex items-center">
             <img
               src="https://cdn.omiseweb.com/logo02.png"
@@ -181,7 +637,6 @@ export default function Home() {
             />
           </a>
 
-          {/* Desktop navigation - PC版は変更なし */}
           <nav className="hidden lg:flex items-center gap-6 text-sm font-medium">
             {(Object.keys(t.nav) as Array<keyof typeof t.nav>).map((key) => (
               <a
@@ -199,9 +654,7 @@ export default function Home() {
             ))}
           </nav>
 
-          {/* Desktop right section - PC版は元のデザインに戻す */}
           <div className="hidden lg:flex items-center gap-4">
-            {/* Simplified language selector */}
             <div className="flex items-center gap-1">
               {languageOptions.map(({ code, short }) => (
                 <button
@@ -218,7 +671,6 @@ export default function Home() {
               ))}
             </div>
 
-            {/* Professional CTA */}
             <a
               href="#contact"
               className="px-5 py-2 bg-slate-900 text-white text-sm font-medium rounded-lg hover:bg-slate-800 transition-colors duration-200 shadow-sm hover:shadow-md"
@@ -227,9 +679,7 @@ export default function Home() {
             </a>
           </div>
 
-          {/* Mobile right section (Language Icon + Menu Button) */}
           <div className="flex items-center gap-2 lg:hidden">
-            {/* Mobile language icon button & popup */}
             <div className="relative" ref={langMenuRef}>
               <button
                 onClick={() => setLangMenuOpen(!isLangMenuOpen)}
@@ -269,7 +719,6 @@ export default function Home() {
               )}
             </div>
 
-            {/* Mobile menu button */}
             <button
               onClick={() => setMenuOpen(!isMenuOpen)}
               className="lg:hidden p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors duration-200"
@@ -286,7 +735,6 @@ export default function Home() {
           </div>
         </Container>
 
-        {/* Mobile menu (Dropdown) */}
         <div
           className={`lg:hidden bg-white border-t border-slate-200 transition-all duration-300 ${
             isMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0 overflow-hidden"
@@ -303,8 +751,6 @@ export default function Home() {
                 {t.nav[key]}
               </a>
             ))}
-
-            {/* ハンバーガーメニュー内の言語セレクターは削除 */}
             
             <a
               href="#contact"
@@ -316,14 +762,11 @@ export default function Home() {
           </nav>
         </div>
       </header>
-      {/* ▲▲▲ ヘッダーの修正はここまで ▲▲▲ */}
 
-      {/* Professional Hero Section with Video Background */}
       <section
         id="home"
         className="relative min-h-screen flex items-center justify-center text-white pt-16 overflow-hidden"
       >
-        {/* Video Background */}
         <video
           autoPlay
           loop
@@ -337,15 +780,12 @@ export default function Home() {
         >
           Your browser does not support the video tag.
         </video>
-        {/* Fallback Background */}
         <div className="absolute inset-0 bg-slate-50 z-[-1]"></div>
 
-        {/* Overlay to ensure text readability */}
         <div className="absolute top-0 left-0 w-full h-full bg-black/50 z-10"></div>
 
         <Container className="relative z-20 py-20 sm:py-32">
           <div className="max-w-4xl mx-auto text-center">
-            {/* Professional trust badge */}
             <div className="mb-8 inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm text-white text-sm font-medium rounded-full border border-white/20">
               <span className="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
               Trusted by 200+ businesses across Japan
@@ -378,7 +818,6 @@ export default function Home() {
         </Container>
       </section>
 
-      {/* Professional Services Section */}
       <FadeInSection id="services" className="py-24 bg-white">
         <Container>
           <div className="max-w-3xl mx-auto text-center mb-16">
@@ -511,7 +950,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Visual Showcase */}
           <div className="bg-slate-50 rounded-2xl p-8 lg:p-12">
             <img
               src="https://placehold.co/1200x600/e2e8f0/475569?text=Responsive+Design+Showcase"
@@ -521,8 +959,38 @@ export default function Home() {
           </div>
         </Container>
       </FadeInSection>
+
+      {/* Pricing Section */}
+      <FadeInSection id="pricing" className="py-24 bg-slate-50">
+        {/* ... content for pricing ... */}
+      </FadeInSection>
+
+      {/* How it Works Section */}
+      <FadeInSection id="how" className="py-24 bg-white">
+        {/* ... content for how it works ... */}
+      </FadeInSection>
+
+      {/* Works/Portfolio Section */}
+      <FadeInSection id="works" className="py-24 bg-slate-900 text-white">
+        {/* ... content for works/portfolio ... */}
+      </FadeInSection>
       
-      {/* ... Other sections will be here ... */}
+      {/* FAQ Section */}
+      <FadeInSection id="faq" className="py-24 bg-white">
+        {/* ... content for faq ... */}
+      </FadeInSection>
+
+      {/* Contact Section */}
+      <FadeInSection id="contact" className="py-24 bg-slate-50">
+        {/* ... content for contact ... */}
+      </FadeInSection>
+
+      {/* Footer */}
+      <footer className="bg-slate-900 text-white py-12">
+          <Container className="text-center text-slate-400">
+              <p>&copy; {new Date().getFullYear()} OmiseWeb. All rights reserved.</p>
+          </Container>
+      </footer>
 
       <ScrollTopButton show={showScrollTop} onClick={scrollToTop} />
     </div>
