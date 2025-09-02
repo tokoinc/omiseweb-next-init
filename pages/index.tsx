@@ -5,8 +5,6 @@ import type React from "react"
 import { useState, useEffect, useRef } from "react"
 import type { ReactNode } from "react"
 
-import { Globe, Check } from "lucide-react"
-
 /**
  * A responsive container component that centers content and limits its width.
  */
@@ -914,7 +912,21 @@ export default function Home() {
                   className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors duration-200"
                   aria-label="Choose language"
                 >
-                  <Globe className="h-5 w-5" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5 9S14.485 3 12 3s-4.5 4.03-4.5 9 2.015 9 4.5 9z"
+                    />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2 12h20" />
+                  </svg>
                 </button>
 
                 {isLangPopupOpen && (
@@ -929,7 +941,6 @@ export default function Home() {
                         className="w-full px-4 py-2 text-left hover:bg-slate-50 flex items-center justify-between transition-colors"
                       >
                         <span className="text-slate-700">{option.fullName}</span>
-                        {currentLang === option.code && <Check className="h-4 w-4 text-green-600" />}
                       </button>
                     ))}
                   </div>
