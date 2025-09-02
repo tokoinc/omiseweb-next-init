@@ -623,142 +623,143 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white text-slate-900 flex flex-col">
-      {/* Professional Header with refined design */}
-      <header className="fixed top-0 z-50 w-full border-b border-slate-200/50 bg-white/95 backdrop-blur-sm supports-[backdrop-filter]:bg-white/90">
-        <Container className="flex h-16 items-center justify-between">
-          {/* Logo */}
-          <a href="#home" className="flex items-center">
-            <img
-              src="https://cdn.omiseweb.com/logo02.png"
-              alt="OmiseWeb Logo"
-              className="h-8 w-auto"
-            />
-          </a>
+      {/* ▼▼▼ ここから変更 ▼▼▼ */}
+      <header className="fixed top-0 z-50 w-full border-b border-slate-200/50 bg-white/95 backdrop-blur-sm supports-[backdrop-filter]:bg-white/90">
+        <Container className="flex h-16 items-center justify-between">
+          {/* Logo */}
+          <a href="#home" className="flex items-center">
+            <img
+              src="https://cdn.omiseweb.com/logo02.png"
+              alt="OmiseWeb Logo"
+              className="h-8 w-auto"
+            />
+          </a>
 
-          {/* Desktop navigation - more compact */}
-          <nav className="hidden lg:flex items-center gap-6 text-sm font-medium">
-            {(Object.keys(t.nav) as Array<keyof typeof t.nav>).map((key) => (
-              <a
-                key={key}
-                href={`#${key}`}
-                className={`px-3 py-2 rounded-lg transition-colors duration-200 ${
-                  activeSection === key
-                    ? "text-slate-900 bg-slate-100"
-                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
-                }`}
-                onClick={() => setMenuOpen(false)}
-              >
-                {t.nav[key]}
-              </a>
-            ))}
-          </nav>
+          {/* Desktop navigation */}
+          <nav className="hidden lg:flex items-center gap-6 text-sm font-medium">
+            {(Object.keys(t.nav) as Array<keyof typeof t.nav>).map((key) => (
+              <a
+                key={key}
+                href={`#${key}`}
+                className={`px-3 py-2 rounded-lg transition-colors duration-200 ${
+                  activeSection === key
+                    ? "text-slate-900 bg-slate-100"
+                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                }`}
+                onClick={() => setMenuOpen(false)}
+              >
+                {t.nav[key]}
+              </a>
+            ))}
+          </nav>
 
-          {/* Compact right section */}
-          <div className="hidden lg:flex items-center gap-4">
-            {/* Simplified language selector */}
-            <div className="flex items-center gap-1">
-              {languageOptions.map(({ code, label }) => (
-                <button
-                  key={code}
-                  onClick={() => setLang(code)}
-                  className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors duration-200 ${
-                    lang === code
-                      ? "bg-slate-900 text-white"
-                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
+          {/* Desktop right section */}
+          <div className="hidden lg:flex items-center gap-4">
+            <div className="flex items-center gap-1">
+              {languageOptions.map(({ code, label }) => (
+                <button
+                  key={code}
+                  onClick={() => setLang(code)}
+                  className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors duration-200 ${
+                    lang === code
+                      ? "bg-slate-900 text-white"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <a
+              href="#contact"
+              className="px-5 py-2 bg-slate-900 text-white text-sm font-medium rounded-lg hover:bg-slate-800 transition-colors duration-200 shadow-sm hover:shadow-md"
+            >
+              Get Started
+            </a>
+          </div>
 
-            {/* Professional CTA */}
-            <a
-              href="#contact"
-              className="px-5 py-2 bg-slate-900 text-white text-sm font-medium rounded-lg hover:bg-slate-800 transition-colors duration-200 shadow-sm hover:shadow-md"
-            >
-              Get Started
-            </a>
-          </div>
+          {/* Mobile right section (Language + Menu Button) */}
+          <div className="flex items-center gap-2 lg:hidden">
+            {/* Mobile language selector */}
+            <div className="flex items-center gap-1">
+              {languageOptions.map(({ code, label }) => (
+                <button
+                  key={code}
+                  onClick={() => setLang(code)}
+                  className={`px-2 py-1 text-xs font-medium rounded-md transition-colors duration-200 ${
+                    lang === code
+                      ? "bg-slate-900 text-white"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
 
-          {/* Mobile menu button */}
-          <button
-            onClick={() => setMenuOpen(!isMenuOpen)}
-            className="lg:hidden p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors duration-200"
-            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              {isMenuOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              )}
-            </svg>
-          </button>
-        </Container>
+            {/* Mobile menu button */}
+            <button
+              onClick={() => setMenuOpen(!isMenuOpen)}
+              className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors duration-200"
+              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            >
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                {isMenuOpen ? (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                ) : (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                )}
+              </svg>
+            </button>
+          </div>
+        </Container>
 
-        {/* Mobile menu */}
-        <div
-          className={`lg:hidden bg-white border-t border-slate-200 transition-all duration-300 ${
-            isMenuOpen
-              ? "max-h-96 opacity-100"
-              : "max-h-0 opacity-0 overflow-hidden"
-          }`}
-        >
-          <nav className="px-4 py-4 space-y-2">
-            {(Object.keys(t.nav) as Array<keyof typeof t.nav>).map((key) => (
-              <a
-                key={key}
-                href={`#${key}`}
-                className="block py-2 px-3 rounded-lg text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors duration-200 font-medium"
-                onClick={() => setMenuOpen(false)}
-              >
-                {t.nav[key]}
-              </a>
-            ))}
-
-            {/* Mobile language selector */}
-            <div className="flex gap-2 pt-3 border-t border-slate-200">
-              {languageOptions.map(({ code, label }) => (
-                <button
-                  key={code}
-                  onClick={() => setLang(code)}
-                  className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors duration-200 ${
-                    lang === code
-                      ? "bg-slate-900 text-white"
-                      : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-
-            <a
-              href="#contact"
-              className="block mt-4 py-2 px-4 bg-slate-900 text-white text-center font-medium rounded-lg hover:bg-slate-800 transition-colors duration-200"
-              onClick={() => setMenuOpen(false)}
-            >
-              Get Started
-            </a>
-          </nav>
-        </div>
-      </header>
+        {/* Mobile menu */}
+        <div
+          className={`lg:hidden bg-white border-t border-slate-200 transition-all duration-300 ${
+            isMenuOpen
+              ? "max-h-96 opacity-100"
+              : "max-h-0 opacity-0 overflow-hidden"
+          }`}
+        >
+          <nav className="px-4 py-4 space-y-2">
+            {(Object.keys(t.nav) as Array<keyof typeof t.nav>).map((key) => (
+              <a
+                key={key}
+                href={`#${key}`}
+                className="block py-2 px-3 rounded-lg text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors duration-200 font-medium"
+                onClick={() => setMenuOpen(false)}
+              >
+                {t.nav[key]}
+              </a>
+            ))}
+            {/* Mobile language selector was here and is now removed */}
+            <a
+              href="#contact"
+              className="block mt-4 pt-4 border-t border-slate-200 py-2 px-4 bg-slate-900 text-white text-center font-medium rounded-lg hover:bg-slate-800 transition-colors duration-200"
+              onClick={() => setMenuOpen(false)}
+            >
+              Get Started
+            </a>
+          </nav>
+        </div>
+      </header>
+      {/* ▲▲▲ ここまで変更 ▲▲▲ */}
 
       {/* Professional Hero Section with Video Background */}
       <section
