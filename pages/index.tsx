@@ -23,7 +23,7 @@ const Container = ({
  * it enters the viewport with enhanced animation effects.
  */
 const FadeInSection: React.FC<{
-  id: string;
+  id?: string;
   className?: string;
   children: React.ReactNode;
 }> = ({ id, className = "", children }) => {
@@ -98,6 +98,8 @@ const messages: Record<
     heroSubtitle: string;
     ctaPrimary: string;
     ctaSecondary: string;
+    statsTitle: string;
+    stats: Array<{ value: string; label: string }>;
     servicesHeading: string;
     servicesSubheading: string;
     servicesItems: {
@@ -117,8 +119,20 @@ const messages: Record<
     }>;
     howHeading: string;
     howSteps: Array<{ title: string; description: string; icon: string }>;
+    teamHeading: string;
+    teamSubheading: string;
+    teamMembers: Array<{ name: string; role: string; bio: string }>;
+    caseStudiesHeading: string;
+    caseStudiesSubheading: string;
+    caseStudies: Array<{
+      title: string;
+      client: string;
+      results: string;
+      description: string;
+    }>;
+    clientsHeading: string;
     worksHeading: string;
-    worksTestimonials: Array<{ text: string; author: string; role: string }>;
+    worksTestimonials: Array<{ text: string; author: string; role: string; company: string }>;
     faqHeading: string;
     faqs: Array<{ question: string; answer: string }>;
     contactHeading: string;
@@ -130,6 +144,21 @@ const messages: Record<
       message: string;
     };
     contactButton: string;
+    footer: {
+      tagline: string;
+      quickLinks: string;
+      services: string;
+      resources: string;
+      company: string;
+      legal: string;
+      contact: string;
+      followUs: string;
+      newsletter: string;
+      newsletterPlaceholder: string;
+      newsletterButton: string;
+      rights: string;
+      certifications: string;
+    };
   }
 > = {
   en: {
@@ -137,8 +166,8 @@ const messages: Record<
       home: "Home",
       services: "Services",
       pricing: "Pricing",
-      works: "Portfolio",
-      how: "Process",
+      portfolio: "Portfolio",
+      team: "Team",
       faq: "FAQ",
       contact: "Contact",
     },
@@ -146,7 +175,14 @@ const messages: Record<
     heroSubtitle:
       "Professional website creation and management for international businesses. From concept to launch in just 2 weeks.",
     ctaPrimary: "Start Your Project",
-    ctaSecondary: "View Pricing",
+    ctaSecondary: "View Our Work",
+    statsTitle: "Trusted by Leading Businesses Across Japan",
+    stats: [
+      { value: "500+", label: "Websites Launched" },
+      { value: "98%", label: "Client Satisfaction" },
+      { value: "2 weeks", label: "Average Launch Time" },
+      { value: "24/7", label: "Support Available" },
+    ],
     servicesHeading: "Complete Web Solutions",
     servicesSubheading:
       "Everything you need to establish a strong digital presence in Japan's competitive market.",
@@ -187,7 +223,7 @@ const messages: Record<
         price: "¥50,000",
         monthly: "¥0/month",
         description: "Perfect for small cafes",
-        features: ["5-page website", "Basic SEO", "1 language"],
+        features: ["5-page website", "Basic SEO", "1 language", "Mobile responsive", "SSL certificate"],
       },
       {
         name: "Take",
@@ -199,6 +235,8 @@ const messages: Record<
           "Booking system",
           "3 languages",
           "Monthly updates",
+          "Priority support",
+          "Analytics dashboard",
         ],
         highlight: true,
       },
@@ -212,6 +250,8 @@ const messages: Record<
           "Advanced features",
           "Priority support",
           "Weekly updates",
+          "Custom integrations",
+          "Dedicated account manager",
         ],
       },
     ],
@@ -238,17 +278,56 @@ const messages: Record<
         icon: "🚀",
       },
     ],
-    worksHeading: "Success Stories",
+    teamHeading: "Meet Our Expert Team",
+    teamSubheading: "Dedicated professionals with years of experience in Japanese market",
+    teamMembers: [
+      { name: "Hiroshi Tanaka", role: "CEO & Founder", bio: "15+ years in web development" },
+      { name: "Sarah Chen", role: "Lead Designer", bio: "Award-winning UI/UX specialist" },
+      { name: "Alex Thompson", role: "Technical Director", bio: "Full-stack development expert" },
+      { name: "Yuki Yamamoto", role: "Project Manager", bio: "Bilingual project coordination" },
+    ],
+    caseStudiesHeading: "Success Stories",
+    caseStudiesSubheading: "Real results from real businesses",
+    caseStudies: [
+      {
+        title: "Sakura Restaurant",
+        client: "Traditional Japanese Cuisine",
+        results: "+350% online reservations",
+        description: "Complete digital transformation with multilingual booking system",
+      },
+      {
+        title: "Beauty Lounge Tokyo",
+        client: "Premium Salon Chain",
+        results: "5x social media engagement",
+        description: "Integrated booking and social media management platform",
+      },
+      {
+        title: "Fusion Bistro",
+        client: "International Restaurant",
+        results: "280% ROI in 6 months",
+        description: "SEO-optimized website with online ordering system",
+      },
+    ],
+    clientsHeading: "Trusted by Industry Leaders",
+    worksHeading: "Client Testimonials",
     worksTestimonials: [
       {
         text: "OmiseWeb transformed our business. International customers now find us easily and bookings increased 300%.",
         author: "Tanaka-san",
-        role: "Restaurant Owner, Shibuya",
+        role: "Owner",
+        company: "Sakura Sushi Restaurant",
       },
       {
         text: "The multilingual website helped us serve Thai and Chinese customers better. Professional service from start to finish.",
-        author: "Yuki",
-        role: "Salon Owner, Harajuku",
+        author: "Yuki Matsumoto",
+        role: "Manager",
+        company: "Beauty Salon Harajuku",
+      },
+      {
+        text: "Their team understood our needs perfectly. The website looks amazing and our online presence has grown tremendously.",
+        author: "Michael Lee",
+        role: "CEO",
+        company: "Fusion Kitchen Tokyo",
       },
     ],
     faqHeading: "Frequently Asked Questions",
@@ -283,14 +362,29 @@ const messages: Record<
       message: "Tell us about your project...",
     },
     contactButton: "Send Message",
+    footer: {
+      tagline: "Building Digital Success in Japan Since 2015",
+      quickLinks: "Quick Links",
+      services: "Services",
+      resources: "Resources",
+      company: "Company",
+      legal: "Legal",
+      contact: "Contact Us",
+      followUs: "Follow Us",
+      newsletter: "Stay Updated",
+      newsletterPlaceholder: "Enter your email",
+      newsletterButton: "Subscribe",
+      rights: "All rights reserved.",
+      certifications: "Certifications & Partners",
+    },
   },
   th: {
     nav: {
       home: "หน้าแรก",
       services: "บริการ",
       pricing: "ราคา",
-      works: "ผลงาน",
-      how: "ขั้นตอน",
+      portfolio: "ผลงาน",
+      team: "ทีม",
       faq: "คำถามที่พบบ่อย",
       contact: "ติดต่อ",
     },
@@ -298,7 +392,14 @@ const messages: Record<
     heroSubtitle:
       "สร้างและจัดการเว็บไซต์มืออาชีพสำหรับธุรกิจนานาชาติ เสร็จภายใน 2 สัปดาห์",
     ctaPrimary: "เริ่มโปรเจค",
-    ctaSecondary: "ดูราคา",
+    ctaSecondary: "ดูผลงาน",
+    statsTitle: "ได้รับความไว้วางใจจากธุรกิจชั้นนำทั่วญี่ปุ่น",
+    stats: [
+      { value: "500+", label: "เว็บไซต์ที่เปิดตัว" },
+      { value: "98%", label: "ความพึงพอใจของลูกค้า" },
+      { value: "2 สัปดาห์", label: "ระยะเวลาเปิดตัวเฉลี่ย" },
+      { value: "24/7", label: "การสนับสนุน" },
+    ],
     servicesHeading: "โซลูชันเว็บครบวงจร",
     servicesSubheading:
       "ทุกสิ่งที่คุณต้องการเพื่อสร้างตัวตนทางดิจิทัลในตลาดญี่ปุ่น",
@@ -339,14 +440,14 @@ const messages: Record<
         price: "¥50,000",
         monthly: "¥0/เดือน",
         description: "เหมาะสำหรับร้านเล็ก",
-        features: ["เว็บไซต์ 5 หน้า", "SEO พื้นฐาน", "1 ภาษา"],
+        features: ["เว็บไซต์ 5 หน้า", "SEO พื้นฐาน", "1 ภาษา", "รองรับมือถือ", "ใบรับรอง SSL"],
       },
       {
         name: "Take",
         price: "¥100,000",
         monthly: "¥10,000/เดือน",
         description: "ตัวเลือกยอดนิยม",
-        features: ["เว็บไซต์ 10 หน้า", "ระบบจอง", "3 ภาษา", "อัปเดตรายเดือน"],
+        features: ["เว็บไซต์ 10 หน้า", "ระบบจอง", "3 ภาษา", "อัปเดตรายเดือน", "การสนับสนุนพิเศษ", "แดชบอร์ดวิเคราะห์"],
         highlight: true,
       },
       {
@@ -359,6 +460,8 @@ const messages: Record<
           "คุณสมบัติขั้นสูง",
           "การสนับสนุนเป็นพิเศษ",
           "อัปเดตรายสัปดาห์",
+          "การรวมที่กำหนดเอง",
+          "ผู้จัดการบัญชีเฉพาะ",
         ],
       },
     ],
@@ -385,17 +488,56 @@ const messages: Record<
         icon: "🚀",
       },
     ],
-    worksHeading: "เรื่องราวความสำเร็จ",
+    teamHeading: "พบทีมผู้เชี่ยวชาญของเรา",
+    teamSubheading: "ผู้เชี่ยวชาญที่ทุ่มเทพร้อมประสบการณ์หลายปีในตลาดญี่ปุ่น",
+    teamMembers: [
+      { name: "ฮิโรชิ ทานากะ", role: "CEO & ผู้ก่อตั้ง", bio: "15+ ปีในการพัฒนาเว็บ" },
+      { name: "ซาราห์ เฉิน", role: "หัวหน้านักออกแบบ", bio: "ผู้เชี่ยวชาญ UI/UX ที่ได้รับรางวัล" },
+      { name: "อเล็กซ์ ธอมป์สัน", role: "ผู้อำนวยการฝ่ายเทคนิค", bio: "ผู้เชี่ยวชาญการพัฒนาฟูลสแต็ก" },
+      { name: "ยูกิ ยามาโมโตะ", role: "ผู้จัดการโครงการ", bio: "การประสานงานโครงการสองภาษา" },
+    ],
+    caseStudiesHeading: "เรื่องราวความสำเร็จ",
+    caseStudiesSubheading: "ผลลัพธ์จริงจากธุรกิจจริง",
+    caseStudies: [
+      {
+        title: "ร้านอาหารซากุระ",
+        client: "อาหารญี่ปุ่นดั้งเดิม",
+        results: "+350% การจองออนไลน์",
+        description: "การเปลี่ยนแปลงดิจิทัลที่สมบูรณ์พร้อมระบบจองหลายภาษา",
+      },
+      {
+        title: "บิวตี้เลาจน์โตเกียว",
+        client: "เครือซาลอนพรีเมียม",
+        results: "5x การมีส่วนร่วมในโซเชียลมีเดีย",
+        description: "แพลตฟอร์มการจองและการจัดการโซเชียลมีเดียแบบรวม",
+      },
+      {
+        title: "ฟิวชันบิสโตร",
+        client: "ร้านอาหารนานาชาติ",
+        results: "280% ROI ใน 6 เดือน",
+        description: "เว็บไซต์ที่ปรับ SEO พร้อมระบบสั่งอาหารออนไลน์",
+      },
+    ],
+    clientsHeading: "ได้รับความไว้วางใจจากผู้นำในอุตสาหกรรม",
+    worksHeading: "คำรับรองจากลูกค้า",
     worksTestimonials: [
       {
         text: "OmiseWeb เปลี่ยนธุรกิจของเรา ลูกค้าต่างชาติค้นหาเราได้ง่ายและการจองเพิ่มขึ้น 300%",
         author: "ทานากะ-ซัง",
-        role: "เจ้าของร้านอาหาร, ชิบุยะ",
+        role: "เจ้าของ",
+        company: "ร้านอาหารซากุระซูชิ",
       },
       {
         text: "เว็บไซต์หลายภาษาช่วยให้เราให้บริการลูกค้าไทยและจีนได้ดีขึ้น บริการมืออาชีพตั้งแต่เริ่มต้นจนจบ",
-        author: "ยูกิ",
-        role: "เจ้าของซาลอน, ฮาราจูกุ",
+        author: "ยูกิ มัตสึโมโตะ",
+        role: "ผู้จัดการ",
+        company: "ซาลอนความงามฮาราจูกุ",
+      },
+      {
+        text: "ทีมของพวกเขาเข้าใจความต้องการของเราอย่างสมบูรณ์แบบ เว็บไซต์ดูน่าทึ่งและการปรากฏตัวออนไลน์ของเราเติบโตอย่างมาก",
+        author: "ไมเคิล ลี",
+        role: "CEO",
+        company: "ฟิวชันคิทเช่นโตเกียว",
       },
     ],
     faqHeading: "คำถามที่พบบ่อย",
@@ -430,21 +572,43 @@ const messages: Record<
       message: "บอกเราเกี่ยวกับโปรเจคของคุณ...",
     },
     contactButton: "ส่งข้อความ",
+    footer: {
+      tagline: "สร้างความสำเร็จดิจิทัลในญี่ปุ่นตั้งแต่ปี 2015",
+      quickLinks: "ลิงก์ด่วน",
+      services: "บริการ",
+      resources: "ทรัพยากร",
+      company: "บริษัท",
+      legal: "กฎหมาย",
+      contact: "ติดต่อเรา",
+      followUs: "ติดตามเรา",
+      newsletter: "อัปเดตข่าวสาร",
+      newsletterPlaceholder: "กรอกอีเมลของคุณ",
+      newsletterButton: "สมัครสมาชิก",
+      rights: "สงวนลิขสิทธิ์",
+      certifications: "ใบรับรองและพันธมิตร",
+    },
   },
   zh: {
     nav: {
       home: "首页",
       services: "服务",
       pricing: "价格",
-      works: "案例",
-      how: "流程",
+      portfolio: "作品集",
+      team: "团队",
       faq: "常见问题",
       contact: "联系我们",
     },
     heroTitle: "在日本创建餐厅和美发沙龙网站",
     heroSubtitle: "为国际企业提供专业的网站创建和管理服务。从概念到上线仅需2周。",
     ctaPrimary: "开始项目",
-    ctaSecondary: "查看价格",
+    ctaSecondary: "查看作品",
+    statsTitle: "受到日本各地领先企业的信任",
+    stats: [
+      { value: "500+", label: "已发布网站" },
+      { value: "98%", label: "客户满意度" },
+      { value: "2周", label: "平均发布时间" },
+      { value: "24/7", label: "支持服务" },
+    ],
     servicesHeading: "完整的网络解决方案",
     servicesSubheading: "在日本竞争激烈的市场中建立强大数字化形象所需的一切。",
     servicesItems: {
@@ -484,14 +648,14 @@ const messages: Record<
         price: "¥50,000",
         monthly: "¥0/月",
         description: "适合小型咖啡厅",
-        features: ["5页网站", "基础SEO", "1种语言"],
+        features: ["5页网站", "基础SEO", "1种语言", "移动响应式", "SSL证书"],
       },
       {
         name: "Take",
         price: "¥100,000",
         monthly: "¥10,000/月",
         description: "最受欢迎选择",
-        features: ["10页网站", "预订系统", "3种语言", "月度更新"],
+        features: ["10页网站", "预订系统", "3种语言", "月度更新", "优先支持", "分析仪表板"],
         highlight: true,
       },
       {
@@ -499,7 +663,7 @@ const messages: Record<
         price: "¥200,000",
         monthly: "¥30,000/月",
         description: "高级解决方案",
-        features: ["无限页面", "高级功能", "优先支持", "每周更新"],
+        features: ["无限页面", "高级功能", "优先支持", "每周更新", "自定义集成", "专属客户经理"],
       },
     ],
     howHeading: "我们经过验证的流程",
@@ -513,17 +677,56 @@ const messages: Record<
       { title: "开发", description: "1-2周专业开发", icon: "⚡" },
       { title: "上线与支持", description: "上线并持续维护", icon: "🚀" },
     ],
-    worksHeading: "成功案例",
+    teamHeading: "认识我们的专家团队",
+    teamSubheading: "在日本市场拥有多年经验的专业人士",
+    teamMembers: [
+      { name: "田中宏", role: "CEO & 创始人", bio: "15年以上网站开发经验" },
+      { name: "陈莎拉", role: "首席设计师", bio: "获奖UI/UX专家" },
+      { name: "亚历克斯·汤普森", role: "技术总监", bio: "全栈开发专家" },
+      { name: "山本雪", role: "项目经理", bio: "双语项目协调" },
+    ],
+    caseStudiesHeading: "成功案例",
+    caseStudiesSubheading: "真实企业的真实成果",
+    caseStudies: [
+      {
+        title: "樱花餐厅",
+        client: "传统日本料理",
+        results: "+350% 在线预订",
+        description: "配备多语言预订系统的完整数字化转型",
+      },
+      {
+        title: "东京美容休息室",
+        client: "高级沙龙连锁",
+        results: "5倍社交媒体参与度",
+        description: "综合预订和社交媒体管理平台",
+      },
+      {
+        title: "融合小酒馆",
+        client: "国际餐厅",
+        results: "6个月内280%投资回报率",
+        description: "带有在线订餐系统的SEO优化网站",
+      },
+    ],
+    clientsHeading: "受到行业领导者的信任",
+    worksHeading: "客户评价",
     worksTestimonials: [
       {
         text: "OmiseWeb改变了我们的业务。国际客户现在很容易找到我们，预订量增加了300%。",
         author: "田中先生",
-        role: "餐厅老板，涩谷",
+        role: "老板",
+        company: "樱花寿司餐厅",
       },
       {
         text: "多语言网站帮助我们更好地为泰语和中文客户服务。从开始到结束的专业服务。",
-        author: "雪",
-        role: "沙龙老板，原宿",
+        author: "松本雪",
+        role: "经理",
+        company: "原宿美容沙龙",
+      },
+      {
+        text: "他们的团队完美地理解了我们的需求。网站看起来很棒，我们的在线存在感大大增长。",
+        author: "迈克尔·李",
+        role: "CEO",
+        company: "东京融合厨房",
       },
     ],
     faqHeading: "常见问题",
@@ -554,6 +757,21 @@ const messages: Record<
       message: "告诉我们您的项目...",
     },
     contactButton: "发送消息",
+    footer: {
+      tagline: "自2015年起在日本建立数字成功",
+      quickLinks: "快速链接",
+      services: "服务",
+      resources: "资源",
+      company: "公司",
+      legal: "法律",
+      contact: "联系我们",
+      followUs: "关注我们",
+      newsletter: "保持更新",
+      newsletterPlaceholder: "输入您的电子邮件",
+      newsletterButton: "订阅",
+      rights: "版权所有",
+      certifications: "认证与合作伙伴",
+    },
   },
 };
 
@@ -580,7 +798,7 @@ export default function Home() {
       const scrollY = window.scrollY;
       setShowScrollTop(scrollY > 500);
 
-      const sections = ["home", "services", "pricing", "works", "how", "faq", "contact"];
+      const sections = ["home", "services", "pricing", "portfolio", "team", "faq", "contact"];
       const currentSection = sections.find((section) => {
         const element = document.getElementById(section);
         if (element) {
@@ -603,12 +821,35 @@ export default function Home() {
   };
 
   const portfolioImages = [
-    "https://placehold.co/600x400/f87171/ffffff?text=Restaurant+Site",
-    "https://placehold.co/600x400/34d399/ffffff?text=Salon+Booking",
-    "https://placehold.co/600x400/60a5fa/ffffff?text=Cafe+Menu",
-    "https://placehold.co/600x400/fbbf24/ffffff?text=Boutique+Shop",
-    "https://placehold.co/600x400/a78bfa/ffffff?text=Event+Page",
-    "https://placehold.co/600x400/f472b6/ffffff?text=Nail+Art+Studio",
+    { src: "https://placehold.co/600x400/1e293b/ffffff?text=Restaurant+Site", category: "Restaurant" },
+    { src: "https://placehold.co/600x400/0f172a/ffffff?text=Salon+Booking", category: "Salon" },
+    { src: "https://placehold.co/600x400/1e293b/ffffff?text=Cafe+Menu", category: "Cafe" },
+    { src: "https://placehold.co/600x400/0f172a/ffffff?text=Boutique+Shop", category: "Retail" },
+    { src: "https://placehold.co/600x400/1e293b/ffffff?text=Spa+Website", category: "Wellness" },
+    { src: "https://placehold.co/600x400/0f172a/ffffff?text=Bar+Lounge", category: "Entertainment" },
+  ];
+
+  const clientLogos = [
+    "https://placehold.co/200x80/ffffff/1e293b?text=Client+1",
+    "https://placehold.co/200x80/ffffff/1e293b?text=Client+2",
+    "https://placehold.co/200x80/ffffff/1e293b?text=Client+3",
+    "https://placehold.co/200x80/ffffff/1e293b?text=Client+4",
+    "https://placehold.co/200x80/ffffff/1e293b?text=Client+5",
+    "https://placehold.co/200x80/ffffff/1e293b?text=Client+6",
+  ];
+
+  const teamImages = [
+    "https://placehold.co/400x400/1e293b/ffffff?text=CEO",
+    "https://placehold.co/400x400/0f172a/ffffff?text=Designer",
+    "https://placehold.co/400x400/1e293b/ffffff?text=Developer",
+    "https://placehold.co/400x400/0f172a/ffffff?text=PM",
+  ];
+
+  const certifications = [
+    "https://placehold.co/150x60/ffffff/1e293b?text=ISO+9001",
+    "https://placehold.co/150x60/ffffff/1e293b?text=Google+Partner",
+    "https://placehold.co/150x60/ffffff/1e293b?text=AWS+Certified",
+    "https://placehold.co/150x60/ffffff/1e293b?text=SSL+Secured",
   ];
 
   return (
@@ -618,7 +859,17 @@ export default function Home() {
           from { transform: scale(0.95); opacity: 0; }
           to { transform: scale(1); opacity: 1; }
         }
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-20px); }
+        }
+        @keyframes pulse-glow {
+          0%, 100% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.5); }
+          50% { box-shadow: 0 0 40px rgba(239, 68, 68, 0.8); }
+        }
         .animate-fade-in-scale { animation: fade-in-scale 0.2s ease-out forwards; }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        .animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
         .faq-answer {
             transition: max-height 0.5s cubic-bezier(0.25, 0.1, 0.25, 1.0), opacity 0.3s ease-in-out;
             max-height: 0;
@@ -626,7 +877,7 @@ export default function Home() {
             overflow: hidden;
         }
         .faq-answer-open {
-            max-height: 200px; /* Adjust as needed */
+            max-height: 300px;
             opacity: 1;
         }
         .faq-icon {
@@ -634,6 +885,24 @@ export default function Home() {
         }
         .faq-icon-open {
             transform: rotate(45deg);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         }
       `}</style>
       <div className="min-h-screen bg-white text-slate-900 flex flex-col">
@@ -657,7 +926,7 @@ export default function Home() {
                   </button>
                 ))}
               </div>
-              <a href="#contact" className="px-5 py-2 bg-slate-900 text-white text-sm font-medium rounded-lg hover:bg-slate-800 transition-colors duration-200 shadow-sm hover:shadow-md">
+              <a href="#contact" className="px-5 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm font-medium rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-sm hover:shadow-md">
                 Get Started
               </a>
             </div>
@@ -666,8 +935,6 @@ export default function Home() {
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3s-4.5 4.03-4.5 9 2.015 9 4.5 9z" />
                   <path strokeLinecap="round" strokeLinejoin="round" d="M2 12h20" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 2.25c2.485 0 4.5 4.03 4.5 9s-2.015 9-4.5 9" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 2.25C9.515 2.25 7.5 6.28 7.5 12s2.015 9.75 4.5 9.75" />
                 </svg>
               </button>
               <button onClick={() => setMenuOpen(!isMenuOpen)} className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors duration-200" aria-label={isMenuOpen ? "Close menu" : "Open menu"}>
@@ -685,7 +952,7 @@ export default function Home() {
                 ))}
               </div>
               <div className="mt-4 pt-4 border-t border-slate-200">
-                <a href="#contact" className="block w-full py-2 px-4 bg-slate-900 text-white text-center font-medium rounded-lg hover:bg-slate-800 transition-colors duration-200" onClick={() => setMenuOpen(false)}>
+                <a href="#contact" className="block w-full py-2 px-4 bg-gradient-to-r from-red-500 to-red-600 text-white text-center font-medium rounded-lg hover:from-red-600 hover:to-red-700 transition-colors duration-200" onClick={() => setMenuOpen(false)}>
                   Get Started
                 </a>
               </div>
@@ -719,23 +986,42 @@ export default function Home() {
             <video autoPlay loop muted playsInline className="absolute top-0 left-0 w-full h-full object-cover z-0" src="https://cdn.omiseweb.com/hero04.mp4" onError={(e) => { e.currentTarget.style.display = "none"; }}>
               Your browser does not support the video tag.
             </video>
-            <div className="absolute inset-0 bg-slate-50 z-[-1]"></div>
-            <div className="absolute top-0 left-0 w-full h-full bg-black/50 z-10"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-slate-900/80 to-black/60 z-10"></div>
             <Container className="relative z-20 py-20 sm:py-32">
               <div className="max-w-4xl mx-auto text-center">
-                <div className="mb-8 inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm text-white text-sm font-medium rounded-full border border-white/20">
-                  <span className="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
-                  Trusted by 200+ businesses across Japan
+                <div className="mb-8 inline-flex items-center px-4 py-2 glass-effect text-white text-sm font-medium rounded-full border border-white/20">
+                  <span className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></span>
+                  {t.statsTitle}
                 </div>
-                <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-8 text-white shadow-text">{t.heroTitle}</h1>
+                <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-8 text-white">{t.heroTitle}</h1>
                 <p className="text-xl sm:text-2xl text-slate-200 mb-12 leading-relaxed max-w-3xl mx-auto">{t.heroSubtitle}</p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                  <a href="#contact" className="px-8 py-4 bg-white text-slate-900 font-semibold rounded-lg hover:bg-slate-200 transition-colors duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">{t.ctaPrimary}</a>
-                  <a href="#pricing" className="px-8 py-4 border border-white/50 text-white font-semibold rounded-lg hover:bg-white/10 backdrop-blur-sm transition-colors duration-200">{t.ctaSecondary}</a>
+                  <a href="#contact" className="px-8 py-4 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 animate-pulse-glow">{t.ctaPrimary}</a>
+                  <a href="#portfolio" className="px-8 py-4 border border-white/50 text-white font-semibold rounded-lg hover:bg-white/10 backdrop-blur-sm transition-colors duration-200">{t.ctaSecondary}</a>
                 </div>
               </div>
             </Container>
+            <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20">
+              <div className="animate-bounce">
+                <svg className="w-6 h-6 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+              </div>
+            </div>
           </section>
+
+          <FadeInSection className="py-16 bg-gradient-to-b from-slate-50 to-white">
+            <Container>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                {t.stats.map((stat, idx) => (
+                  <div key={idx} className="hover-lift">
+                    <div className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-red-500 to-red-600 bg-clip-text text-transparent mb-2">{stat.value}</div>
+                    <div className="text-slate-600 font-medium">{stat.label}</div>
+                  </div>
+                ))}
+              </div>
+            </Container>
+          </FadeInSection>
 
           <FadeInSection id="services" className="py-24 bg-white">
             <Container>
@@ -744,99 +1030,199 @@ export default function Home() {
                 <p className="text-xl text-slate-600 leading-relaxed">{t.servicesSubheading}</p>
               </div>
               <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-                <div className="p-8 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors duration-200">
-                  <div className="w-12 h-12 bg-slate-900 rounded-lg flex items-center justify-center mb-6"><svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg></div>
-                  <h3 className="text-xl font-semibold text-slate-900 mb-4">{t.servicesItems.creation.title}</h3>
-                  <ul className="space-y-2 text-slate-600">{t.servicesItems.creation.list.map((item, idx) => (<li key={idx} className="flex items-start gap-2"><span className="w-1.5 h-1.5 bg-slate-400 rounded-full mt-2 flex-shrink-0"></span><span className="text-sm">{item}</span></li>))}</ul>
+                <div className="group relative overflow-hidden rounded-xl hover-lift">
+                  <img src="https://placehold.co/400x300/f8fafc/1e293b?text=Web+Creation" alt="Web Creation" className="w-full h-48 object-cover" />
+                  <div className="p-6 bg-white">
+                    <h3 className="text-xl font-semibold text-slate-900 mb-4">{t.servicesItems.creation.title}</h3>
+                    <ul className="space-y-2 text-slate-600">{t.servicesItems.creation.list.map((item, idx) => (<li key={idx} className="flex items-start gap-2"><span className="w-1.5 h-1.5 bg-red-500 rounded-full mt-2 flex-shrink-0"></span><span className="text-sm">{item}</span></li>))}</ul>
+                  </div>
                 </div>
-                <div className="p-8 bg-slate-900 text-white rounded-xl">
-                  <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mb-6"><svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg></div>
-                  <h3 className="text-xl font-semibold mb-4">{t.servicesItems.management.title}</h3><p className="text-white/80 text-sm mb-4">Most Popular</p>
-                  <ul className="space-y-2 text-white/90">{t.servicesItems.management.list.map((item, idx) => (<li key={idx} className="flex items-start gap-2"><span className="w-1.5 h-1.5 bg-white/60 rounded-full mt-2 flex-shrink-0"></span><span className="text-sm">{item}</span></li>))}</ul>
+                <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-slate-900 to-slate-800 text-white hover-lift">
+                  <img src="https://placehold.co/400x300/0f172a/ffffff?text=Management" alt="Management" className="w-full h-48 object-cover opacity-20" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
+                  <div className="relative p-6">
+                    <div className="absolute top-4 right-4 px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full">POPULAR</div>
+                    <h3 className="text-xl font-semibold mb-4 mt-8">{t.servicesItems.management.title}</h3>
+                    <ul className="space-y-2 text-white/90">{t.servicesItems.management.list.map((item, idx) => (<li key={idx} className="flex items-start gap-2"><span className="w-1.5 h-1.5 bg-white/60 rounded-full mt-2 flex-shrink-0"></span><span className="text-sm">{item}</span></li>))}</ul>
+                  </div>
                 </div>
-                <div className="p-8 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors duration-200">
-                  <div className="w-12 h-12 bg-slate-900 rounded-lg flex items-center justify-center mb-6"><svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg></div>
-                  <h3 className="text-xl font-semibold text-slate-900 mb-4">{t.servicesItems.marketing.title}</h3><div className="inline-block px-3 py-1 bg-slate-200 text-slate-700 text-xs font-medium rounded-full mb-4">{t.servicesItems.marketing.comingSoon}</div><p className="text-slate-600 text-sm">{t.servicesItems.marketing.description}</p>
+                <div className="group relative overflow-hidden rounded-xl hover-lift">
+                  <img src="https://placehold.co/400x300/f8fafc/1e293b?text=Marketing" alt="Marketing" className="w-full h-48 object-cover" />
+                  <div className="p-6 bg-white">
+                    <h3 className="text-xl font-semibold text-slate-900 mb-2">{t.servicesItems.marketing.title}</h3>
+                    <div className="inline-block px-3 py-1 bg-slate-200 text-slate-700 text-xs font-medium rounded-full mb-4">{t.servicesItems.marketing.comingSoon}</div>
+                    <p className="text-slate-600 text-sm">{t.servicesItems.marketing.description}</p>
+                  </div>
                 </div>
-                <div className="p-8 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors duration-200">
-                  <div className="w-12 h-12 bg-slate-900 rounded-lg flex items-center justify-center mb-6"><svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg></div>
-                  <h3 className="text-xl font-semibold text-slate-900 mb-4">{t.servicesItems.recruitment.title}</h3><div className="inline-block px-3 py-1 bg-slate-200 text-slate-700 text-xs font-medium rounded-full mb-4">{t.servicesItems.recruitment.comingSoon}</div><p className="text-slate-600 text-sm">{t.servicesItems.recruitment.description}</p>
+                <div className="group relative overflow-hidden rounded-xl hover-lift">
+                  <img src="https://placehold.co/400x300/f8fafc/1e293b?text=Recruitment" alt="Recruitment" className="w-full h-48 object-cover" />
+                  <div className="p-6 bg-white">
+                    <h3 className="text-xl font-semibold text-slate-900 mb-2">{t.servicesItems.recruitment.title}</h3>
+                    <div className="inline-block px-3 py-1 bg-slate-200 text-slate-700 text-xs font-medium rounded-full mb-4">{t.servicesItems.recruitment.comingSoon}</div>
+                    <p className="text-slate-600 text-sm">{t.servicesItems.recruitment.description}</p>
+                  </div>
                 </div>
               </div>
             </Container>
           </FadeInSection>
 
-          <FadeInSection id="pricing" className="py-24 bg-slate-50">
-            <Container>
-                <div className="max-w-3xl mx-auto text-center mb-16">
-                    <h2 className="text-3xl sm:text-5xl font-bold mb-6 text-slate-900">{t.pricingHeading}</h2>
-                </div>
-                <div className="grid lg:grid-cols-3 gap-8 items-center">
-                    {t.pricingPlans.map((plan, idx) => (
-                        <div key={idx} className={`p-8 rounded-2xl transition-all duration-300 ${plan.highlight ? 'bg-slate-900 text-white shadow-2xl scale-105' : 'bg-white shadow-lg'}`}>
-                            <h3 className="text-2xl font-bold mb-4">{plan.name}</h3>
-                            <p className={`${plan.highlight ? 'text-slate-300' : 'text-slate-600'} mb-6`}>{plan.description}</p>
-                            <div className="mb-8">
-                                <span className="text-5xl font-extrabold">{plan.price}</span>
-                                <span className={`${plan.highlight ? 'text-slate-400' : 'text-slate-500'} ml-2`}>{plan.monthly}</span>
-                            </div>
-                            <ul className="space-y-4 mb-8">
-                                {plan.features.map((feature, fIdx) => (
-                                    <li key={fIdx} className="flex items-center gap-3">
-                                        <svg className={`w-6 h-6 flex-shrink-0 ${plan.highlight ? 'text-green-400' : 'text-slate-900'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                                        <span>{feature}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                            <a href="#contact" className={`block w-full text-center py-3 px-6 rounded-lg font-semibold transition-colors duration-200 ${plan.highlight ? 'bg-white text-slate-900 hover:bg-slate-200' : 'bg-slate-900 text-white hover:bg-slate-800'}`}>
-                                Choose Plan
-                            </a>
-                        </div>
-                    ))}
-                </div>
-            </Container>
-          </FadeInSection>
-          
-          <FadeInSection id="how" className="py-24 bg-white">
+          <FadeInSection className="py-24 bg-slate-50">
             <Container>
               <div className="max-w-3xl mx-auto text-center mb-16">
-                <h2 className="text-3xl sm:text-5xl font-bold mb-6 text-slate-900">{t.howHeading}</h2>
+                <h2 className="text-3xl sm:text-5xl font-bold mb-6 text-slate-900">{t.caseStudiesHeading}</h2>
+                <p className="text-xl text-slate-600">{t.caseStudiesSubheading}</p>
               </div>
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                {t.howSteps.map((step, idx) => (
-                  <div key={idx} className="text-center p-6">
-                    <div className="text-6xl mb-4">{step.icon}</div>
-                    <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
-                    <p className="text-slate-600">{step.description}</p>
+              <div className="grid md:grid-cols-3 gap-8">
+                {t.caseStudies.map((study, idx) => (
+                  <div key={idx} className="bg-white rounded-xl overflow-hidden shadow-lg hover-lift">
+                    <img src={`https://placehold.co/400x250/1e293b/ffffff?text=${study.title.replace(' ', '+')}`} alt={study.title} className="w-full h-48 object-cover" />
+                    <div className="p-6">
+                      <h3 className="text-xl font-bold text-slate-900 mb-2">{study.title}</h3>
+                      <p className="text-sm text-slate-500 mb-3">{study.client}</p>
+                      <div className="text-3xl font-bold bg-gradient-to-r from-red-500 to-red-600 bg-clip-text text-transparent mb-3">{study.results}</div>
+                      <p className="text-slate-600">{study.description}</p>
+                    </div>
                   </div>
                 ))}
               </div>
             </Container>
           </FadeInSection>
+
+          <FadeInSection id="pricing" className="py-24 bg-white">
+            <Container>
+                <div className="max-w-3xl mx-auto text-center mb-16">
+                    <h2 className="text-3xl sm:text-5xl font-bold mb-6 text-slate-900">{t.pricingHeading}</h2>
+                </div>
+                <div className="grid lg:grid-cols-3 gap-8 items-stretch">
+                    {t.pricingPlans.map((plan, idx) => (
+                        <div key={idx} className={`relative rounded-2xl overflow-hidden transition-all duration-300 hover-lift ${plan.highlight ? 'bg-gradient-to-br from-slate-900 to-slate-800 text-white shadow-2xl scale-105' : 'bg-white shadow-lg border border-slate-200'}`}>
+                            {plan.highlight && (
+                              <div className="absolute top-0 right-0 bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-1 text-sm font-bold rounded-bl-lg">
+                                RECOMMENDED
+                              </div>
+                            )}
+                            <div className="p-8">
+                                <h3 className="text-2xl font-bold mb-4">{plan.name}</h3>
+                                <p className={`${plan.highlight ? 'text-slate-300' : 'text-slate-600'} mb-6`}>{plan.description}</p>
+                                <div className="mb-8">
+                                    <span className="text-5xl font-extrabold">{plan.price}</span>
+                                    <span className={`${plan.highlight ? 'text-slate-400' : 'text-slate-500'} ml-2`}>{plan.monthly}</span>
+                                </div>
+                                <ul className="space-y-4 mb-8">
+                                    {plan.features.map((feature, fIdx) => (
+                                        <li key={fIdx} className="flex items-center gap-3">
+                                            <svg className={`w-6 h-6 flex-shrink-0 ${plan.highlight ? 'text-green-400' : 'text-green-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                                            <span className="text-sm">{feature}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                                <a href="#contact" className={`block w-full text-center py-3 px-6 rounded-lg font-semibold transition-all duration-200 ${plan.highlight ? 'bg-gradient-to-r from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700' : 'bg-slate-900 text-white hover:bg-slate-800'}`}>
+                                    Choose Plan
+                                </a>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </Container>
+          </FadeInSection>
           
-          <FadeInSection id="works" className="py-24 bg-slate-50">
+          <FadeInSection id="portfolio" className="py-24 bg-slate-50">
             <Container>
                 <div className="max-w-3xl mx-auto text-center mb-16">
                     <h2 className="text-3xl sm:text-5xl font-bold mb-6 text-slate-900">{t.worksHeading}</h2>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-16">
-                    {portfolioImages.map((src, idx) => (
-                        <div key={idx} className="overflow-hidden rounded-lg shadow-lg">
-                            <img src={src} alt={`Portfolio item ${idx + 1}`} className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-300" />
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-16">
+                    {portfolioImages.map((item, idx) => (
+                        <div key={idx} className="group relative overflow-hidden rounded-lg shadow-lg hover-lift">
+                            <img src={item.src} alt={`Portfolio ${item.category}`} className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                              <div className="p-6 text-white">
+                                <p className="text-sm font-semibold uppercase tracking-wider">{item.category}</p>
+                                <p className="text-lg font-bold">View Project →</p>
+                              </div>
+                            </div>
                         </div>
                     ))}
                 </div>
-                <div className="space-y-8">
+                
+                <div className="bg-white rounded-2xl p-12 shadow-xl">
+                  <h3 className="text-2xl font-bold text-center mb-12">{t.clientsHeading}</h3>
+                  <div className="grid grid-cols-3 md:grid-cols-6 gap-8 items-center">
+                    {clientLogos.map((logo, idx) => (
+                      <img key={idx} src={logo} alt={`Client ${idx + 1}`} className="w-full h-auto opacity-60 hover:opacity-100 transition-opacity duration-300" />
+                    ))}
+                  </div>
+                </div>
+                
+                <div className="mt-16 space-y-8">
                     {t.worksTestimonials.map((testimonial, idx) => (
-                        <blockquote key={idx} className="bg-white p-8 rounded-lg shadow-md max-w-2xl mx-auto">
-                            <p className="text-lg text-slate-700 mb-4">"{testimonial.text}"</p>
-                            <footer className="text-right">
-                                <p className="font-semibold text-slate-900">{testimonial.author}</p>
-                                <p className="text-sm text-slate-500">{testimonial.role}</p>
-                            </footer>
+                        <blockquote key={idx} className="bg-white p-8 rounded-2xl shadow-lg max-w-3xl mx-auto hover-lift">
+                            <div className="flex items-start gap-4">
+                              <svg className="w-8 h-8 text-red-500 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                              </svg>
+                              <div className="flex-1">
+                                <p className="text-lg text-slate-700 mb-4 italic">{testimonial.text}</p>
+                                <footer className="flex items-center gap-4">
+                                  <img src={`https://placehold.co/60x60/1e293b/ffffff?text=${testimonial.author.charAt(0)}`} alt={testimonial.author} className="w-12 h-12 rounded-full" />
+                                  <div>
+                                    <p className="font-semibold text-slate-900">{testimonial.author}</p>
+                                    <p className="text-sm text-slate-500">{testimonial.role}, {testimonial.company}</p>
+                                  </div>
+                                </footer>
+                              </div>
+                            </div>
                         </blockquote>
                     ))}
                 </div>
+            </Container>
+          </FadeInSection>
+          
+          <FadeInSection id="team" className="py-24 bg-white">
+            <Container>
+              <div className="max-w-3xl mx-auto text-center mb-16">
+                <h2 className="text-3xl sm:text-5xl font-bold mb-6 text-slate-900">{t.teamHeading}</h2>
+                <p className="text-xl text-slate-600">{t.teamSubheading}</p>
+              </div>
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {t.teamMembers.map((member, idx) => (
+                  <div key={idx} className="text-center group hover-lift">
+                    <div className="relative mb-6 overflow-hidden rounded-lg">
+                      <img src={teamImages[idx]} alt={member.name} className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                    <h3 className="text-xl font-semibold text-slate-900 mb-1">{member.name}</h3>
+                    <p className="text-sm text-red-600 font-medium mb-2">{member.role}</p>
+                    <p className="text-slate-600 text-sm">{member.bio}</p>
+                    <div className="flex justify-center gap-3 mt-4">
+                      <a href="#" className="text-slate-400 hover:text-slate-600 transition-colors">
+                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+                      </a>
+                      <a href="#" className="text-slate-400 hover:text-slate-600 transition-colors">
+                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Container>
+          </FadeInSection>
+
+          <FadeInSection className="py-24 bg-gradient-to-br from-slate-900 to-slate-800 text-white">
+            <Container>
+              <div className="max-w-3xl mx-auto text-center mb-16">
+                <h2 className="text-3xl sm:text-5xl font-bold mb-6">{t.howHeading}</h2>
+              </div>
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {t.howSteps.map((step, idx) => (
+                  <div key={idx} className="text-center p-6 glass-effect rounded-xl hover-lift">
+                    <div className="text-6xl mb-4 animate-float" style={{ animationDelay: `${idx * 0.5}s` }}>{step.icon}</div>
+                    <div className="text-5xl font-bold text-white/20 mb-4">{String(idx + 1).padStart(2, '0')}</div>
+                    <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
+                    <p className="text-slate-300 text-sm">{step.description}</p>
+                  </div>
+                ))}
+              </div>
             </Container>
           </FadeInSection>
 
@@ -847,12 +1233,12 @@ export default function Home() {
                 </div>
                 <div className="max-w-3xl mx-auto space-y-4">
                     {t.faqs.map((faq, idx) => (
-                        <div key={idx} className="border border-slate-200 rounded-lg overflow-hidden">
-                            <button onClick={() => setOpenFaq(openFaq === idx ? null : idx)} className="w-full flex justify-between items-center p-5 text-left font-semibold">
-                                <span>{faq.question}</span>
-                                <svg className={`w-5 h-5 text-slate-500 faq-icon ${openFaq === idx ? 'faq-icon-open' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+                        <div key={idx} className="border border-slate-200 rounded-xl overflow-hidden bg-white hover:shadow-lg transition-shadow duration-300">
+                            <button onClick={() => setOpenFaq(openFaq === idx ? null : idx)} className="w-full flex justify-between items-center p-6 text-left font-semibold hover:bg-slate-50 transition-colors">
+                                <span className="pr-4">{faq.question}</span>
+                                <svg className={`w-5 h-5 text-slate-500 flex-shrink-0 faq-icon ${openFaq === idx ? 'faq-icon-open' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
                             </button>
-                            <div className={`px-5 pb-5 text-slate-600 faq-answer ${openFaq === idx ? 'faq-answer-open' : ''}`}>
+                            <div className={`px-6 pb-6 text-slate-600 faq-answer ${openFaq === idx ? 'faq-answer-open' : ''}`}>
                                 <p>{faq.answer}</p>
                             </div>
                         </div>
@@ -861,36 +1247,136 @@ export default function Home() {
             </Container>
           </FadeInSection>
 
-          <FadeInSection id="contact" className="py-24 bg-slate-900 text-white">
+          <FadeInSection id="contact" className="py-24 bg-gradient-to-br from-slate-50 to-white">
             <Container>
                 <div className="max-w-3xl mx-auto text-center mb-16">
-                    <h2 className="text-3xl sm:text-5xl font-bold mb-6">{t.contactHeading}</h2>
-                    <p className="text-xl text-slate-300 leading-relaxed">{t.contactSubheading}</p>
+                    <h2 className="text-3xl sm:text-5xl font-bold mb-6 text-slate-900">{t.contactHeading}</h2>
+                    <p className="text-xl text-slate-600 leading-relaxed">{t.contactSubheading}</p>
                 </div>
-                <form className="max-w-xl mx-auto space-y-6">
-                    <div className="grid sm:grid-cols-2 gap-6">
-                        <input type="text" placeholder={t.contactPlaceholders.name} className="w-full p-4 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
-                        <input type="email" placeholder={t.contactPlaceholders.email} className="w-full p-4 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
+                <div className="max-w-5xl mx-auto grid lg:grid-cols-2 gap-12">
+                  <div className="bg-white p-8 rounded-2xl shadow-xl">
+                    <form className="space-y-6">
+                        <div className="grid sm:grid-cols-2 gap-6">
+                            <input type="text" placeholder={t.contactPlaceholders.name} className="w-full p-4 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all" />
+                            <input type="email" placeholder={t.contactPlaceholders.email} className="w-full p-4 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all" />
+                        </div>
+                        <input type="text" placeholder={t.contactPlaceholders.business} className="w-full p-4 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all" />
+                        <textarea placeholder={t.contactPlaceholders.message} rows={5} className="w-full p-4 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all resize-none"></textarea>
+                        <button type="submit" className="w-full py-4 px-8 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-lg hover:shadow-red-500/30 transform hover:scale-105">
+                            {t.contactButton}
+                        </button>
+                    </form>
+                  </div>
+                  <div className="space-y-8">
+                    <div className="bg-white p-6 rounded-xl shadow-lg">
+                      <h3 className="font-semibold text-lg mb-4 text-slate-900">Tokyo Office</h3>
+                      <div className="space-y-3 text-slate-600">
+                        <p className="flex items-start gap-3">
+                          <svg className="w-5 h-5 text-red-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                          <span>〒150-0001 Tokyo, Shibuya City<br />1-2-3 Business Tower 10F</span>
+                        </p>
+                        <p className="flex items-center gap-3">
+                          <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                          <span>+81 3-1234-5678</span>
+                        </p>
+                        <p className="flex items-center gap-3">
+                          <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                          <span>hello@omiseweb.com</span>
+                        </p>
+                      </div>
                     </div>
-                    <input type="text" placeholder={t.contactPlaceholders.business} className="w-full p-4 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
-                    <textarea placeholder={t.contactPlaceholders.message} rows={5} className="w-full p-4 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"></textarea>
-                    <button type="submit" className="w-full py-4 px-8 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-lg hover:shadow-red-500/50 transform hover:scale-105">
-                        {t.contactButton}
-                    </button>
-                </form>
+                    <div className="bg-gradient-to-r from-red-500 to-red-600 p-6 rounded-xl text-white">
+                      <h3 className="font-semibold text-lg mb-3">Ready to Get Started?</h3>
+                      <p className="text-white/90 mb-4">Join 500+ successful businesses that trust OmiseWeb for their digital presence in Japan.</p>
+                      <div className="flex items-center gap-2 text-sm">
+                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
+                        <span>Free consultation</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
+                        <span>No hidden fees</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
+                        <span>24/7 support</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
             </Container>
           </FadeInSection>
         </main>
         
-        <footer className="bg-slate-900 text-slate-400 py-8">
-            <Container className="text-center text-sm">
-                <p>&copy; {new Date().getFullYear()} OmiseWeb. All rights reserved.</p>
+        <footer className="bg-slate-900 text-white">
+          <div className="border-b border-slate-800">
+            <Container className="py-16">
+              <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-8">
+                <div className="lg:col-span-2">
+                  <img src="https://cdn.omiseweb.com/logo02.png" alt="OmiseWeb" className="h-10 mb-4 brightness-0 invert" />
+                  <p className="text-slate-400 mb-6">{t.footer.tagline}</p>
+                  <div className="space-y-4">
+                    <h4 className="font-semibold">{t.footer.newsletter}</h4>
+                    <div className="flex gap-2">
+                      <input type="email" placeholder={t.footer.newsletterPlaceholder} className="flex-1 px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
+                      <button className="px-6 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-lg hover:from-red-600 hover:to-red-700 transition-all">
+                        {t.footer.newsletterButton}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-4">{t.footer.services}</h4>
+                  <ul className="space-y-2 text-slate-400">
+                    <li><a href="#services" className="hover:text-white transition-colors">Web Development</a></li>
+                    <li><a href="#services" className="hover:text-white transition-colors">Site Management</a></li>
+                    <li><a href="#services" className="hover:text-white transition-colors">SEO Services</a></li>
+                    <li><a href="#services" className="hover:text-white transition-colors">Consulting</a></li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-4">{t.footer.company}</h4>
+                  <ul className="space-y-2 text-slate-400">
+                    <li><a href="#team" className="hover:text-white transition-colors">About Us</a></li>
+                    <li><a href="#portfolio" className="hover:text-white transition-colors">Portfolio</a></li>
+                    <li><a href="#contact" className="hover:text-white transition-colors">Contact</a></li>
+                    <li><a href="#" className="hover:text-white transition-colors">Careers</a></li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-4">{t.footer.resources}</h4>
+                  <ul className="space-y-2 text-slate-400">
+                    <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
+                    <li><a href="#faq" className="hover:text-white transition-colors">FAQ</a></li>
+                    <li><a href="#" className="hover:text-white transition-colors">Documentation</a></li>
+                    <li><a href="#" className="hover:text-white transition-colors">Support</a></li>
+                  </ul>
+                </div>
+              </div>
             </Container>
-        </footer>
-
-        <ScrollTopButton show={showScrollTop} onClick={scrollToTop} />
-      </div>
-    </>
-  );
-}
-
+          </div>
+          
+          <Container className="py-8">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+              <div className="flex items-center gap-8">
+                <p className="text-slate-400 text-sm">&copy; {new Date().getFullYear()} OmiseWeb. {t.footer.rights}</p>
+                <div className="flex gap-4 text-slate-400 text-sm">
+                  <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+                  <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+                  <a href="#" className="hover:text-white transition-colors">Cookie Policy</a>
+                </div>
+              </div>
+              <div className="flex items-center gap-6">
+                <div className="flex gap-4">
+                  <a href="#" className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-slate-700 transition-colors">
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+                  </a>
+                  <a href="#" className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-slate-700 transition-colors">
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1112.324 0 6.162 6.162 0 01-12.324 0zM12 16a4 4 0 110-8 4 4 0 010 8zm4.965-10.405a1.44 1.44 0 112.881.001 1.44 1.44 0 01-2.881-.001z"/></svg>
+                  </a>
+                  <a href="#" className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-slate-700 transition-colors">
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                  </a>
+                  <a href="#" className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-slate-700 transition-colors">
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                  </a>
+                </div>
