@@ -662,8 +662,13 @@ export default function Home() {
               </a>
             </div>
             <div className="flex items-center gap-2 lg:hidden">
-              <button onClick={() => setLangPopupOpen(true)} className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors duration-200" aria-label="Choose language">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m0 0a9 9 0 019-9m-9 9a9 9 0 009 9" /></svg>
+           <button onClick={() => setLangPopupOpen(true)} className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors duration-200" aria-label="Choose language">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3s-4.5 4.03-4.5 9 2.015 9 4.5 9z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2 12h20" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 2.25c2.485 0 4.5 4.03 4.5 9s-2.015 9-4.5 9" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 2.25C9.515 2.25 7.5 6.28 7.5 12s2.015 9.75 4.5 9.75" />
+                </svg>
               </button>
               <button onClick={() => setMenuOpen(!isMenuOpen)} className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors duration-200" aria-label={isMenuOpen ? "Close menu" : "Open menu"}>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">{isMenuOpen ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /> : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />}</svg>
