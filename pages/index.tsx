@@ -813,8 +813,6 @@ export default function Home() {
     "https://placehold.co/150x60/ffffff/1e293b?text=SSL+Secured",
   ]
 
-  const [currentLang, setCurrentLang] = useState<Lang>("en")
-
   return (
     <>
       <style jsx>{`
@@ -891,8 +889,8 @@ export default function Home() {
                 {languageOptions.map(({ code, label }) => (
                   <button
                     key={code}
-                    onClick={() => setCurrentLang(code)}
-                    className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors duration-200 ${currentLang === code ? "bg-slate-900 text-white" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"}`}
+                    onClick={() => setLang(code)}
+                    className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors duration-200 ${lang === code ? "bg-slate-900 text-white" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"}`}
                   >
                     {label}
                   </button>
@@ -916,6 +914,8 @@ export default function Home() {
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-5 w-5"
                     fill="none"
+                    width="24"
+                    height="24"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                     strokeWidth={2}
@@ -935,7 +935,7 @@ export default function Home() {
                       <button
                         key={option.code}
                         onClick={() => {
-                          setCurrentLang(option.code)
+                          setLang(option.code)
                           setLangPopupOpen(false)
                         }}
                         className="w-full px-4 py-2 text-left hover:bg-slate-50 flex items-center justify-between transition-colors"
