@@ -378,7 +378,151 @@ export default function Home() {
         </Container>
       </section>
 
-      {/* ... The rest of the page components remain unchanged ... */}
+      {/* Professional Services Section */}
+      <FadeInSection id="services" className="py-24 bg-white">
+        <Container>
+          <div className="max-w-3xl mx-auto text-center mb-16">
+            <h2 className="text-3xl sm:text-5xl font-bold mb-6 text-slate-900">
+              {t.servicesHeading}
+            </h2>
+            <p className="text-xl text-slate-600 leading-relaxed">
+              {t.servicesSubheading}
+            </p>
+          </div>
+
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4 mb-16">
+            <div className="p-8 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors duration-200">
+              <div className="w-12 h-12 bg-slate-900 rounded-lg flex items-center justify-center mb-6">
+                <svg
+                  className="w-6 h-6 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-slate-900 mb-4">
+                {t.servicesItems.creation.title}
+              </h3>
+              <ul className="space-y-2 text-slate-600">
+                {t.servicesItems.creation.list.map((item: string, idx: number) => (
+                  <li key={idx} className="flex items-start gap-2">
+                    <span className="w-1.5 h-1.5 bg-slate-400 rounded-full mt-2 flex-shrink-0"></span>
+                    <span className="text-sm">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="p-8 bg-slate-900 text-white rounded-xl">
+              <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mb-6">
+                <svg
+                  className="w-6 h-6 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold mb-4">
+                {t.servicesItems.management.title}
+              </h3>
+              <p className="text-white/80 text-sm mb-4">Most Popular</p>
+              <ul className="space-y-2 text-white/90">
+                {t.servicesItems.management.list.map((item: string, idx: number) => (
+                  <li key={idx} className="flex items-start gap-2">
+                    <span className="w-1.5 h-1.5 bg-white/60 rounded-full mt-2 flex-shrink-0"></span>
+                    <span className="text-sm">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="p-8 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors duration-200">
+              <div className="w-12 h-12 bg-slate-900 rounded-lg flex items-center justify-center mb-6">
+                <svg
+                  className="w-6 h-6 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-slate-900 mb-4">
+                {t.servicesItems.marketing.title}
+              </h3>
+              <div className="inline-block px-3 py-1 bg-slate-200 text-slate-700 text-xs font-medium rounded-full mb-4">
+                {t.servicesItems.marketing.comingSoon}
+              </div>
+              <p className="text-slate-600 text-sm">
+                {t.servicesItems.marketing.description}
+              </p>
+            </div>
+
+            <div className="p-8 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors duration-200">
+              <div className="w-12 h-12 bg-slate-900 rounded-lg flex items-center justify-center mb-6">
+                <svg
+                  className="w-6 h-6 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-slate-900 mb-4">
+                {t.servicesItems.recruitment.title}
+              </h3>
+              <div className="inline-block px-3 py-1 bg-slate-200 text-slate-700 text-xs font-medium rounded-full mb-4">
+                {t.servicesItems.recruitment.comingSoon}
+              </div>
+              <p className="text-slate-600 text-sm">
+                {t.servicesItems.recruitment.description}
+              </p>
+            </div>
+          </div>
+
+          {/* Visual Showcase */}
+          <div className="bg-slate-50 rounded-2xl p-8 lg:p-12">
+            <img
+              src="https://placehold.co/1200x600/e2e8f0/475569?text=Responsive+Design+Showcase"
+              alt="Website design showcase"
+              className="rounded-xl shadow-lg w-full"
+            />
+          </div>
+        </Container>
+      </FadeInSection>
+      
+      {/* ... Other sections will be here ... */}
 
       <ScrollTopButton show={showScrollTop} onClick={scrollToTop} />
     </div>
