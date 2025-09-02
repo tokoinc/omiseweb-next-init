@@ -5,6 +5,8 @@ import type React from "react"
 import { useState, useEffect, useRef } from "react"
 import type { ReactNode } from "react"
 
+import { Globe, Check } from "lucide-react"
+
 /**
  * A responsive container component that centers content and limits its width.
  */
@@ -813,6 +815,8 @@ export default function Home() {
     "https://placehold.co/150x60/ffffff/1e293b?text=SSL+Secured",
   ]
 
+  const [currentLang, setCurrentLang] = useState<Lang>("en")
+
   return (
     <>
       <style jsx>{`
@@ -889,8 +893,8 @@ export default function Home() {
                 {languageOptions.map(({ code, label }) => (
                   <button
                     key={code}
-                    onClick={() => setLang(code)}
-                    className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors duration-200 ${lang === code ? "bg-slate-900 text-white" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"}`}
+                    onClick={() => setCurrentLang(code)}
+                    className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors duration-200 ${currentLang === code ? "bg-slate-900 text-white" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"}`}
                   >
                     {label}
                   </button>
@@ -903,14 +907,34 @@ export default function Home() {
                 Get Started
               </a>
             </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-colors duration-200"
-                aria-label="Choose language"
-              >
-                <Globe className="h-5 w-5" />
-              </Button>
+            <div className="flex items-center gap-2 lg:hidden">
+              <div className="relative">
+                <button
+                  onClick={() => setLangPopupOpen(true)}
+                  className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors duration-200"
+                  aria-label="Choose language"
+                >
+                  <Globe className="h-5 w-5" />
+                </button>
+
+                {isLangPopupOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-slate-200 py-2 z-50">
+                    {languageOptions.map((option) => (
+                      <button
+                        key={option.code}
+                        onClick={() => {
+                          setCurrentLang(option.code)
+                          setLangPopupOpen(false)
+                        }}
+                        className="w-full px-4 py-2 text-left hover:bg-slate-50 flex items-center justify-between transition-colors"
+                      >
+                        <span className="text-slate-700">{option.fullName}</span>
+                        {currentLang === option.code && <Check className="h-4 w-4 text-green-600" />}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
               <button
                 onClick={() => setMenuOpen(!isMenuOpen)}
                 className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors duration-200"
@@ -954,61 +978,6 @@ export default function Home() {
             </nav>
           </div>
         </header>
-
-        {isLangPopupOpen && (
-          <div
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm"
-            onClick={() => setLangPopupOpen(false)}
-          >
-            <div
-              onClick={(e) => e.stopPropagation()}
-              className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-xs mx-4 transform animate-fade-in-scale"
-            >
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-bold text-slate-800">
-                  {lang === "en" ? "Choose Language" : lang === "th" ? "เลือกภาษา" : "选择语言"}
-                </h3>
-                <button
-                  onClick={() => setLangPopupOpen(false)}
-                  className="p-1 rounded-full text-slate-500 hover:bg-slate-100"
-                  aria-label="Close language selection"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-              <div className="flex flex-col gap-3">
-                {languageOptions.map(({ code, fullName }) => (
-                  <button
-                    key={code}
-                    onClick={() => {
-                      setLang(code)
-                      setLangPopupOpen(false)
-                    }}
-                    className={`w-full py-3 px-4 rounded-lg text-md font-medium text-left transition-colors duration-200 flex items-center justify-between ${lang === code ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200"}`}
-                  >
-                    <span>{fullName}</span>
-                    {lang === code && (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    )}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
 
         <main>
           <section
@@ -1493,7 +1462,7 @@ export default function Home() {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                       >
-                        <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 23 3z" />
+                        <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" />
                       </svg>
                     </a>
                     <a
@@ -1644,7 +1613,7 @@ export default function Home() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     >
-                      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 0 112.324 0 6.162 6.162 0 01-12.324 0zM12 16a4 4 0 110-8 4 4 0 010 8zm4.965-10.405a1.44 1.44 0 112.881.001 1.44 1.44 0 01-2.881-.001z" />
+                      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1112.324 0 6.162 6.162 0 01-12.324 0zM12 16a4 4 0 110-8 4 4 0 010 8zm4.965-10.405a1.44 1.44 0 112.881.001 1.44 1.44 0 01-2.881-.001z" />
                     </svg>
                   </a>
                   <a
