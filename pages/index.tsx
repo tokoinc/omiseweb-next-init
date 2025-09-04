@@ -1,9 +1,9 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useEffect, useRef } from "react"
 import type { ReactNode } from "react"
+import { useRouter } from "next/router" // 👈 修正点: useRouterをインポート
 
 /**
  * A responsive container component that centers content and limits its width.
@@ -740,7 +740,9 @@ const messages: Record<
  * The main Home component with professional design upgrades including video and images.
  */
 export default function Home() {
-  const [lang, setLang] = useState<Lang>("en")
+  const router = useRouter()
+  const lang = (router.locale as Lang) || "en"
+
   const [isMenuOpen, setMenuOpen] = useState(false)
   const [showScrollTop, setShowScrollTop] = useState(false)
   const [activeSection, setActiveSection] = useState("home")
@@ -889,7 +891,7 @@ export default function Home() {
                 {languageOptions.map(({ code, label }) => (
                   <button
                     key={code}
-                    onClick={() => setLang(code)}
+                    onClick={() => router.push("/", "/", { locale: code })}
                     className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors duration-200 ${lang === code ? "bg-slate-900 text-white" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"}`}
                   >
                     {label}
@@ -927,7 +929,7 @@ export default function Home() {
                       <button
                         key={option.code}
                         onClick={() => {
-                          setLang(option.code)
+                          router.push("/", "/", { locale: option.code })
                           setLangPopupOpen(false)
                         }}
                         className="w-full px-4 py-2 text-left hover:bg-slate-50 flex items-center justify-between transition-colors"
