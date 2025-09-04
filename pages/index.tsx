@@ -1062,7 +1062,7 @@ export default function Home() {
               <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
                 <div className="group relative overflow-hidden rounded-xl hover-lift">
                   <img
-                    src="https://placehold.co/400x300/f8fafc/1e293b?text=Web+Creation"
+                    src="https://cdn.omiseweb.com/webcreation.webp"
                     alt="Web Creation"
                     className="w-full h-48 object-cover"
                   />
@@ -1080,7 +1080,7 @@ export default function Home() {
                 </div>
                 <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-slate-900 to-slate-800 text-white hover-lift">
                   <img
-                    src="https://placehold.co/400x300/0f172a/ffffff?text=Management"
+                    src="https://cdn.omiseweb.com/webmanagement.webp"
                     alt="Management"
                     className="w-full h-48 object-cover opacity-20"
                   />
